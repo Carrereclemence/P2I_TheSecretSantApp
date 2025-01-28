@@ -1,0 +1,6 @@
+@SSA_HostAddress = http://localhost:5286
+
+GET {{SSA_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
