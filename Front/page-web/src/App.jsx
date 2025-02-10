@@ -1,18 +1,18 @@
 import React from "react";
-import Header from "./Components/Header";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
 import Principale from "./Pages/Principale-nonco";
 import Connection from "./Pages/Connection"
-import './App.css'
 
 function App() {
   return (
-    <div>
+    <Router>
       <Header />
-      <main>
-        <Principale />
-        <Connection />
-      </main>
-    </div>
+      <Routes>
+        <Route path="/" element={<Principale />} />
+        <Route path="/login" element={<Connection />} />
+      </Routes>
+    </Router>
   );
 }
 

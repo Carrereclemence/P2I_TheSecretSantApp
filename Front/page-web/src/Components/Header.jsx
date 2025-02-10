@@ -15,7 +15,7 @@ function Header() {
       {/* Icône de connexion à droite */}
       <div className="login-icon">
         <a href="/login">
-          <FaUserCircle size={32} />
+          <FaUserCircle size={32} color="white" />
         </a>
       </div>
     </header>
