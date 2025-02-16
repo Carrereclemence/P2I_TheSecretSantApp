@@ -128,6 +128,12 @@ public class UsersControllers : ControllerBase
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return Ok(new { token = tokenHandler.WriteToken(token) });
     }
+
+    [HttpOptions]
+    public IActionResult Options()
+    {
+        return Ok();
+    }
 }
 
 // ✅ Modèle pour la connexion (LoginModel)

@@ -10,6 +10,22 @@ var configuration = builder.Configuration;
 // The aim of this is to add API controllers to the application
 builder.Services.AddControllers();
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:3000") // Mets l'URL de ton front-end
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+    );
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 // You as a developer can use Swagger to interact with the API through a web interface
 builder.Services.AddEndpointsApiExplorer();
@@ -71,6 +87,8 @@ builder
     });
 
 var app = builder.Build();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

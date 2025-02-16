@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./../styles/Connection.css"; 
 
 function Connection() {
+    const navigate = useNavigate();
     return (
         <div className="connection">
             <h2>CONNECTION</h2>
             <div className="connexion">
                 <p>J'ai déjà un compte :</p>
-                <button onClick={() => navigate("/login")}>Se connecter</button>
+                <button onClick={() => navigate("/SeCo")}>Se connecter</button>
             </div>
 
             <div className="connexion">
