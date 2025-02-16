@@ -1,40 +1,53 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 [ApiController]
 [Route("ApiUsers/Users")]
 public class UsersControllers : ControllerBase
 {
     private readonly UserContext _context;
+    private readonly IConfiguration _configuration;
 
-    public UsersControllers(UserContext context)
+    // ✅ Constructeur unique
+    public UsersControllers(UserContext context, IConfiguration configuration)
     {
         _context = context;
+        _configuration = configuration;
     }
 
-    // GET: api/users
+    // 🔐 GET: api/users (Nécessite un token JWT)
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
     {
-        // Get items
-        var users = _context.Users;
-        return await users.ToListAsync();
+        var users = await _context.Users.ToListAsync();
+        var userList = users.Select(u => new
+        {
+            Id = u.Id,
+            UserName = u.UserName,
+            FirstName = u.FirstName,
+            LastName = u.LastName,
+        });
+
+        return Ok(userList);
     }
 
-    // GET: api/user/2
+    // 🔍 GET: api/users/2
     [HttpGet("GET")]
     public async Task<ActionResult<Users>> GetItem(int id)
     {
-        // Find a specific item
-        // SingleAsync() throws an exception if no item is found (which is possible, depending on id)
-        // SingleOrDefaultAsync() is a safer choice here
         var user = await _context.Users.SingleOrDefaultAsync(t => t.Id == id);
         if (user == null)
             return NotFound();
         return user;
     }
 
-    // POST: api/user
+    // ➕ POST: api/users (Créer un nouvel utilisateur)
     [HttpPost]
     public async Task<ActionResult<Users>> PostItem(Users item)
     {
@@ -43,13 +56,15 @@ public class UsersControllers : ControllerBase
         return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item);
     }
 
-    // PUT: api/user
+    // ✏️ PUT: api/users (Modifier un utilisateur)
     [HttpPut("PUT")]
     public async Task<IActionResult> PutItem(int id, Users item)
     {
         if (id != item.Id)
             return BadRequest();
+
         _context.Entry(item).State = EntityState.Modified;
+
         try
         {
             await _context.SaveChangesAsync();
@@ -64,15 +79,60 @@ public class UsersControllers : ControllerBase
         return NoContent();
     }
 
-    // DELETE: api/item
+    // 🗑 DELETE: api/users (Supprimer un utilisateur)
     [HttpDelete("DELETE")]
     public async Task<IActionResult> DeleteItem(int id)
     {
         var item = await _context.Users.FindAsync(id);
         if (item == null)
             return NotFound();
+
         _context.Users.Remove(item);
         await _context.SaveChangesAsync();
         return NoContent();
     }
+
+    // 🔑 LOGIN: api/users/login (Générer un token JWT)
+    [HttpPost("login")]
+    [AllowAnonymous] // Permet l'accès sans authentification
+    public IActionResult Login([FromBody] LoginModel model)
+    {
+        var user = _context.Users.SingleOrDefault(u =>
+            u.UserName == model.UserName && u.Password == model.Password
+        );
+
+        if (user == null)
+        {
+            return Unauthorized(new { message = "Nom d'utilisateur ou mot de passe incorrect." });
+        }
+
+        // Génération du token JWT
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(
+                new[]
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Role, user.Admin ? "Admin" : "User"),
+                }
+            ),
+            Expires = DateTime.UtcNow.AddHours(1), // Expiration en 1 heure
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature
+            ),
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return Ok(new { token = tokenHandler.WriteToken(token) });
+    }
+}
+
+// ✅ Modèle pour la connexion (LoginModel)
+public class LoginModel
+{
+    public string UserName { get; set; }
+    public string Password { get; set; }
 }
