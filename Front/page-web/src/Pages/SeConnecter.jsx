@@ -21,6 +21,7 @@ function Login() {
                     "Content-Type": "application/json",
                     "Accept": "application/json"
                 },
+                credentials: "include",
                 body: JSON.stringify({ userName, password }), // Utilisation de UserName
             });
 
