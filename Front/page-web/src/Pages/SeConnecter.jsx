@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import "./../styles/SeConnecter.css"; 
+//faire un dossier service>api.js 
+//mettre tous les appels à l'api du back dedans, en suivant ce qu'on a fait en cours + utilise chat gpt il te donnera tout ce qu'il faut
+//ex: post que tu as fait juste en dessous va la bas
 function Login() {
     const [userName, setUserName] = useState(""); // UserName au lieu d'email
     const [password, setPassword] = useState("");
@@ -14,7 +17,7 @@ function Login() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:5286/api/auth/login", {
+            const response = await fetch("http://localhost:5286/ApiUsers/Users/login", {
                 method: "POST",
                 headers: 
                 {
@@ -33,7 +36,7 @@ function Login() {
             }
 
             localStorage.setItem("token", data.token); // Stockage du token
-            navigate("/dashboard"); // Redirection après connexion
+            navigate("/"); // Redirection après connexion
         } catch (err) {
             setError(err.message);
             setLoading(false);

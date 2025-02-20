@@ -91,11 +91,58 @@ public class UsersControllers : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
+     public class AuthResponse
+    {
+        public string Token { get; set; }
+        public string Message { get; set; }
+    }
 
-    // 🔑 LOGIN: api/users/login (Générer un token JWT)
     [HttpPost("login")]
-    [AllowAnonymous] // Permet l'accès sans authentification
+    [AllowAnonymous] 
+
     public IActionResult Login([FromBody] LoginModel model)
+    {
+        var user = _context.Users.SingleOrDefault(u =>
+            u.UserName == model.UserName && u.Password == model.Password
+        );
+
+        if (user == null)
+        {
+            return Unauthorized(
+                new AuthResponse { Message = "Nom d'utilisateur ou mot de passe incorrect." }
+            );
+        }
+
+        // Génération du token
+        var tokenString = GenerateJWTToken(user.UserName);
+        return Ok(new AuthResponse { Token = tokenString, Message = "Connexion réussie !" });
+    }
+
+    private string GenerateJWTToken(string username)
+    {
+        var securityKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])
+        );
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Name, username),
+            new Claim(ClaimTypes.Role, "User"),
+        };
+
+        var token = new JwtSecurityToken(
+            _configuration["Jwt:Issuer"],
+            _configuration["Jwt:Issuer"],
+            claims,
+            expires: DateTime.Now.AddHours(3),
+            signingCredentials: credentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    /*public IActionResult Login([FromBody] LoginModel model)
     {
         var user = _context.Users.SingleOrDefault(u =>
             u.UserName == model.UserName && u.Password == model.Password
@@ -127,7 +174,7 @@ public class UsersControllers : ControllerBase
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return Ok(new { token = tokenHandler.WriteToken(token) });
-    }
+    }*/
 
     [HttpOptions]
     public IActionResult Options()

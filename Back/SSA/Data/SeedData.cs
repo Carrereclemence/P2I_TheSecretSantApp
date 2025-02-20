@@ -13,6 +13,14 @@ public class SeedData
             Password = "Clem22",
             Admin = true,
         };
+        Users admin = new Users
+        {
+            LastName = "admin",
+            FirstName = "admin",
+            UserName = "admin",
+            Password = "admin",
+            Admin = true,
+        };
         Users François = new Users
         {
             LastName = "Robillard",
