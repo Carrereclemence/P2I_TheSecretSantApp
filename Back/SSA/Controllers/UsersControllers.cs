@@ -39,6 +39,7 @@ public class UsersControllers : ControllerBase
 
     // 🔍 GET: api/users/2
     [HttpGet("GET")]
+    [Authorize]
     public async Task<ActionResult<Users>> GetItem(int id)
     {
         var user = await _context.Users.SingleOrDefaultAsync(t => t.Id == id);
@@ -49,6 +50,7 @@ public class UsersControllers : ControllerBase
 
     // ➕ POST: api/users (Créer un nouvel utilisateur)
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Users>> PostItem(Users item)
     {
         _context.Users.Add(item);
@@ -58,6 +60,7 @@ public class UsersControllers : ControllerBase
 
     // ✏️ PUT: api/users (Modifier un utilisateur)
     [HttpPut("PUT")]
+    [Authorize]
     public async Task<IActionResult> PutItem(int id, Users item)
     {
         if (id != item.Id)
@@ -81,6 +84,7 @@ public class UsersControllers : ControllerBase
 
     // 🗑 DELETE: api/users (Supprimer un utilisateur)
     [HttpDelete("DELETE")]
+    [Authorize]
     public async Task<IActionResult> DeleteItem(int id)
     {
         var item = await _context.Users.FindAsync(id);

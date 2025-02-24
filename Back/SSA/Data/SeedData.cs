@@ -37,7 +37,7 @@ public class SeedData
             Password = "Faustine",
             Admin = false,
         };
-        context.Users.AddRange(Clem, François, Faustine);
+        context.Users.AddRange(Clem, François, Faustine, admin);
 
         context.SaveChanges();
     }
