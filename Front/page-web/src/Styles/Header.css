@@ -12,9 +12,30 @@
     z-index: 1000;
 }
 
+.login-icon {
+    cursor: pointer;
+    margin-left: auto;
+    padding-right: 30px;
+}
+
 .login-icon a {
     text-decoration: none;
     color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.login-icon a svg {
+    transition: transform 0.2s ease-in-out;
+}
+
+.login-icon a:hover svg {
+    transform: scale(1.1);
+}
+
+.logo {
+    height: 60px;
+    max-width: 80px;
 }
 
 .logo-container {
@@ -24,19 +45,27 @@
     flex-shrink: 0;
 }
 
-.logo {
+.logo-container button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.logo-container button img {
     height: 60px;
     max-width: 80px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.logo-container button img:hover {
+    transform: scale(1.1);
 }
 
 .header h1 {
     margin: 0;
     font-size: 1.5rem;
     white-space: nowrap;
-}
-
-.login-icon {
-    cursor: pointer;
-    margin-left: auto;
-    padding-right: 30px;
 }

@@ -13,116 +13,149 @@ public class UsersControllers : ControllerBase
     private readonly UserContext _context;
     private readonly IConfiguration _configuration;
 
-    // ✅ Constructeur unique
     public UsersControllers(UserContext context, IConfiguration configuration)
     {
         _context = context;
         _configuration = configuration;
     }
 
-    // 🔐 GET: api/users (Nécessite un token JWT)
-    [HttpGet]
+    // 🔍 GET: Récupérer son propre profil (Utilisateur connecté)
+    [HttpGet("me")]
     [Authorize]
+    public async Task<ActionResult> GetCurrentUser()
+    {
+        var username = User.Identity.Name;
+        var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
+
+        if (user == null)
+            return NotFound(new { message = "Utilisateur non trouvé." });
+
+        return Ok(
+            new
+            {
+                user.Id,
+                user.UserName,
+                user.FirstName,
+                user.LastName,
+                user.Admin,
+            }
+        );
+    }
+
+    // 🔐 GET: Récupérer tous les utilisateurs (Admin uniquement)
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
     {
         var users = await _context.Users.ToListAsync();
-        var userList = users.Select(u => new
-        {
-            Id = u.Id,
-            UserName = u.UserName,
-            FirstName = u.FirstName,
-            LastName = u.LastName,
-        });
-
-        return Ok(userList);
+        return Ok(
+            users.Select(u => new
+            {
+                u.Id,
+                u.UserName,
+                u.FirstName,
+                u.LastName,
+                u.Admin,
+            })
+        );
     }
 
-    // 🔍 GET: api/users/2
-    [HttpGet("GET")]
-    [Authorize]
-    public async Task<ActionResult<Users>> GetItem(int id)
+    // 🔐 GET: Récupérer un utilisateur par son ID (Admin uniquement)
+    [HttpGet("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<Users>> GetUserById(int id)
     {
-        var user = await _context.Users.SingleOrDefaultAsync(t => t.Id == id);
+        var user = await _context.Users.FindAsync(id);
         if (user == null)
-            return NotFound();
-        return user;
+            return NotFound(new { message = "Utilisateur non trouvé." });
+
+        return Ok(
+            new
+            {
+                user.Id,
+                user.UserName,
+                user.FirstName,
+                user.LastName,
+                user.Admin,
+            }
+        );
     }
 
-    // ➕ POST: api/users (Créer un nouvel utilisateur)
-    [HttpPost]
-    [Authorize]
-    public async Task<ActionResult<Users>> PostItem(Users item)
+    // ➕ POST: Créer un nouvel utilisateur (Inscription)
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<ActionResult> Register([FromBody] RegisterModel model)
     {
-        _context.Users.Add(item);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item);
-    }
+        if (_context.Users.Any(u => u.UserName == model.UserName))
+            return BadRequest(new { message = "Nom d'utilisateur déjà pris." });
 
-    // ✏️ PUT: api/users (Modifier un utilisateur)
-    [HttpPut("PUT")]
-    [Authorize]
-    public async Task<IActionResult> PutItem(int id, Users item)
-    {
-        if (id != item.Id)
-            return BadRequest();
-
-        _context.Entry(item).State = EntityState.Modified;
-
-        try
+        var newUser = new Users
         {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!_context.Users.Any(m => m.Id == id))
-                return NotFound();
-            else
-                throw;
-        }
-        return NoContent();
-    }
+            UserName = model.UserName,
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            Password = model.Password, // ✅ Mot de passe en clair (PAS sécurisé)
+            Admin = model.Admin,
+        };
 
-    // 🗑 DELETE: api/users (Supprimer un utilisateur)
-    [HttpDelete("DELETE")]
-    [Authorize]
-    public async Task<IActionResult> DeleteItem(int id)
-    {
-        var item = await _context.Users.FindAsync(id);
-        if (item == null)
-            return NotFound();
-
-        _context.Users.Remove(item);
+        _context.Users.Add(newUser);
         await _context.SaveChangesAsync();
-        return NoContent();
-    }
-     public class AuthResponse
-    {
-        public string Token { get; set; }
-        public string Message { get; set; }
+
+        return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
     }
 
+    // 🔑 POST: Connexion utilisateur
     [HttpPost("login")]
-    [AllowAnonymous] 
-
-    public IActionResult Login([FromBody] LoginModel model)
+    [AllowAnonymous]
+    public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        var user = _context.Users.SingleOrDefault(u =>
+        var user = await _context.Users.SingleOrDefaultAsync(u =>
             u.UserName == model.UserName && u.Password == model.Password
         );
 
         if (user == null)
         {
-            return Unauthorized(
-                new AuthResponse { Message = "Nom d'utilisateur ou mot de passe incorrect." }
-            );
+            return Unauthorized(new { message = "Nom d'utilisateur ou mot de passe incorrect." });
         }
 
-        // Génération du token
-        var tokenString = GenerateJWTToken(user.UserName);
-        return Ok(new AuthResponse { Token = tokenString, Message = "Connexion réussie !" });
+        var tokenString = GenerateJWTToken(user);
+        return Ok(new { Token = tokenString, Message = "Connexion réussie !" });
     }
 
-    private string GenerateJWTToken(string username)
+    // 🔄 PUT: Modifier un utilisateur (Admin uniquement)
+    [HttpPut("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserModel model)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+            return NotFound(new { message = "Utilisateur non trouvé." });
+
+        user.FirstName = model.FirstName ?? user.FirstName;
+        user.LastName = model.LastName ?? user.LastName;
+        user.Password = model.Password ?? user.Password; // ✅ Modification du mot de passe en clair
+        user.Admin = model.Admin;
+
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    // 🗑 DELETE: Supprimer un utilisateur (Admin uniquement)
+    [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+            return NotFound(new { message = "Utilisateur non trouvé." });
+
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    // 🔐 Génération du token JWT
+    private string GenerateJWTToken(Users user)
     {
         var securityKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])
@@ -131,8 +164,8 @@ public class UsersControllers : ControllerBase
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, "User"),
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Role, user.Admin ? "Admin" : "User"),
         };
 
         var token = new JwtSecurityToken(
@@ -145,51 +178,28 @@ public class UsersControllers : ControllerBase
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
-    /*public IActionResult Login([FromBody] LoginModel model)
-    {
-        var user = _context.Users.SingleOrDefault(u =>
-            u.UserName == model.UserName && u.Password == model.Password
-        );
-
-        if (user == null)
-        {
-            return Unauthorized(new { message = "Nom d'utilisateur ou mot de passe incorrect." });
-        }
-
-        // Génération du token JWT
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(
-                new[]
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, user.Admin ? "Admin" : "User"),
-                }
-            ),
-            Expires = DateTime.UtcNow.AddHours(1), // Expiration en 1 heure
-            SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature
-            ),
-        };
-
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return Ok(new { token = tokenHandler.WriteToken(token) });
-    }*/
-
-    [HttpOptions]
-    public IActionResult Options()
-    {
-        return Ok();
-    }
 }
 
-// ✅ Modèle pour la connexion (LoginModel)
+// ✅ Modèles pour la validation des requêtes
 public class LoginModel
 {
     public string UserName { get; set; }
     public string Password { get; set; }
+}
+
+public class RegisterModel
+{
+    public string UserName { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Password { get; set; }
+    public bool Admin { get; set; }
+}
+
+public class UpdateUserModel
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Password { get; set; } // ✅ Modification du mot de passe en clair possible
+    public bool Admin { get; set; }
 }

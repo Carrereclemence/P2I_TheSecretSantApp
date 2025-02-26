@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./../styles/Principale-nonco.css"; 
+import "./../styles/PrincipaleNonCo.css"; 
 
 function Principale() {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ function Principale() {
             <h4>Pour continuer, il faut que vous vous connectiez :</h4>
             <div className="connexion">
                 <p>J'ai déjà un compte :</p>
-                <button onClick={() => navigate("/SeCo")}>Se connecter</button>
+                <button onClick={() => navigate("/login")}>Se connecter</button>
             </div>
 
             <div className="connexion">

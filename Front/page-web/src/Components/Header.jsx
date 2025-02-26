@@ -2,21 +2,34 @@ import React from "react";
 import "./../styles/Header.css"; 
 import logo from "./../assets/logo.jpg"; 
 import { FaUserCircle } from "react-icons/fa"; 
+import { useNavigate } from "react-router-dom";
+import ApiService from "./../Services/ApiService";
 
 function Header() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const handleLogout = () => {
+    ApiService.logout();
+    navigate("/login");
+    window.location.reload();
+  };
+
   return  (
     <header className="header">
-      {/* Logo à gauche */}
       <div className="logo-container">
-        <img src={logo} alt="Logo Secret Santa" className="logo" />
+        <button onClick={() => navigate("/")}><img src={logo} alt="Logo Secret Santa" className="logo" /></button>
         <h1>The Secret Sant'App</h1>
       </div>
 
-      {/* Icône de connexion à droite */}
       <div className="login-icon">
-        <a href="/login">
-          <FaUserCircle size={32} color="white" />
-        </a>
+        {token ? (
+                    <button onClick={handleLogout}>Se Déconnecter</button>
+                ) : (
+                    <a href="/login">
+                        <FaUserCircle size={32} color="white" />
+                    </a>
+                )}
       </div>
     </header>
   );
