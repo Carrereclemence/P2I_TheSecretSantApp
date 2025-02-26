@@ -1,3 +1,4 @@
+/* ✅ HEADER PRINCIPAL */
 .header {
     position: fixed;
     top: 0;
@@ -5,17 +6,53 @@
     width: 100%;
     background-color: #c62828;
     color: white;
-    padding: 15px 20px;
+    padding: 1%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
 }
 
+/* ✅ LOGO */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 1%;
+    flex-shrink: 0;
+}
+
+.logo-container button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.logo-container button img {
+    padding-right: 5%;
+    height: 60px;
+    max-width: 80px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.logo-container button img:hover {
+    transform: scale(1.1);
+}
+
+/* ✅ TITRE DU SITE */
+.header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    white-space: nowrap;
+}
+
+/* ✅ ICÔNE DE CONNEXION */
 .login-icon {
     cursor: pointer;
-    margin-left: auto;
-    padding-right: 30px;
+    /*margin-left: auto;*/
+    margin-right: 2%;
 }
 
 .login-icon a {
@@ -33,39 +70,88 @@
     transform: scale(1.1);
 }
 
-.logo {
-    height: 60px;
-    max-width: 80px;
+/* 🔹 ADAPTATION POUR TABLETTES (max 1024px) */
+@media (max-width: 1024px) {
+    .header {
+        align-items: center;
+        padding: 12px;
+        text-align: center;
+    }
+
+    .logo-container {
+        gap: 1%;
+    }
+
+    .logo-container button img {
+        padding-right: 5%;
+        height: 50px;
+        max-width: 70px;
+    }
+
+    .header h1 {
+        font-size: 1.3rem;
+    }
+
+    .login-icon {
+        margin-right: 2%;
+        align-items: center;
+    }
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
+/* 🔹 ADAPTATION POUR TÉLÉPHONES (max 768px) */
+@media (max-width: 768px) {
+    .header {
+        align-items: center;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .logo-container {
+        gap: 1%;
+    }
+
+    .logo-container button img {
+        padding-right: 5%;
+        height: 45px;
+        max-width: 65px;
+    }
+
+    .header h1 {
+        font-size: 1.2rem;
+    }
+
+    .login-icon {
+        margin-right: 2%;
+        align-items: center;
+    }
 }
 
-.logo-container button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
+/* 🔹 ADAPTATION POUR PETITS ÉCRANS (max 480px) */
+@media (max-width: 480px) {
+    .header {
+        align-items: center;
+        padding: 8px;
+        text-align: center;
+    }
 
-.logo-container button img {
-    height: 60px;
-    max-width: 80px;
-    transition: transform 0.2s ease-in-out;
-}
+    .logo-container {
+        gap: 1%;
+    }
+    
+    .logo-container button img {
+        padding-right: 5%;
+        height: 40px;
+        max-width: 60px;
+    }
 
-.logo-container button img:hover {
-    transform: scale(1.1);
-}
+    .header h1 {
+        font-size: 1rem;
+    }
 
-.header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    white-space: nowrap;
+    .login-icon a svg {
+        width: 22px;
+        height: 22px;
+        margin-right: 2%;
+        align-items: center;
+    }
 }

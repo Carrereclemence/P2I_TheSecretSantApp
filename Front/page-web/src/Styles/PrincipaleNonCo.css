@@ -1,55 +1,126 @@
+/* ✅ TITRE PRINCIPAL */
 .page-title {
-    position: absolute;
-    top: 80px;
+    position: relative;
+    top: 5vh;
     left: 50%;
     transform: translateX(-50%);
-    /* Centre horizontalement */
     text-align: center;
-    font-size: 3rem;
-    /* Ajuste la taille du texte */
+    font-size: 4vw;
+    /* Ajuste la taille du texte en fonction de la largeur de l'écran */
     font-weight: bold;
     color: #c62828;
 }
 
+/* ✅ SECTION EXPLICATION */
 .explication {
-    background-color: #f0f0f0; /* Gris clair */
-    border-radius: 15px; /* Bords arrondis */
-    padding: 1px; /* Espace intérieur */
-    width: 100%; 
+    background-color: #f0f0f0;
+    font-size: 15px;
+    border-radius: 2vh;
+    padding: 1.5vh;
+    width: 95% ;
+    margin: 8vh auto 5vh;
     text-align: left;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    box-shadow: 0.2vw 0.2vw 1vw rgba(0, 0, 0, 0.1);
 }
 
+/* ✅ CONTAINER DES BOUTONS DE CONNEXION */
 .connexion-container {
-    text-align: left;
-    margin-top: 20px;
+    text-align: center;
+    margin-top: 5vh;
 }
 
+/* ✅ BLOCS DE CONNEXION */
 .connexion {
     display: flex;
     align-items: center;
-    justify-content: left;
-    /* Centre horizontalement */
-    gap: 10px;
-    /* Espace entre le texte et le bouton */
-    margin: 10px 0;
+    justify-content: center;
+    gap: 2vw;
+    margin: 2vh 0;
 }
 
 .connexion p {
-    font-size: 1rem;
+    font-size: 15px;
 }
 
+/* ✅ STYLE DES BOUTONS */
 .connexion button {
     background-color: #c62828;
     color: white;
     border: none;
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: 1.5vh 3vw;
+    border-radius: 1vh;
     cursor: pointer;
-    font-size: 1rem;
-    transition: background 0.3s;
+    font-size: 15px;
+    transition: background 0.3s, transform 0.2s ease-in-out;
 }
 
 .connexion button:hover {
     background-color: #a61919;
+    transform: scale(1.05);
+}
+
+/* 🔹 ADAPTATION POUR TABLETTES (max 1024px) */
+@media (max-width: 1024px) {
+    .page-title {
+        font-size: 3.5vw;
+    }
+
+    .explication {
+        font-size: 15px;
+        padding: 1.8vh;
+    }
+
+    .connexion-container {
+        margin-top: 4vh;
+    }
+
+    .connexion button {
+        font-size: 14px;
+        padding: 1.2vh 2.5vw;
+    }
+}
+
+/* 🔹 ADAPTATION POUR TÉLÉPHONES (max 768px) */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 4vw;
+        top: 6vh;
+    }
+
+    .explication {
+        font-size: 13px;
+        padding: 1.8vh;
+    }
+
+    .connexion {
+        flex-direction: row;
+        gap: 10vh;
+    }
+
+    .connexion button {
+        font-size: 12px;
+        padding: 1.2vh 2.5vw;
+    }
+}
+
+/* 🔹 ADAPTATION POUR PETITS ÉCRANS (max 480px) */
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 5vw;
+        top: 5vh;
+    }
+
+    .explication {
+        font-size: 13px;
+        padding: 1vh;
+    }
+
+    .connexion p {
+        font-size: 12px;
+    }
+
+    .connexion button {
+        font-size: 12px;
+        padding: 10vh 2vw;
+    }
 }
