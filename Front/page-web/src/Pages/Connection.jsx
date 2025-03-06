@@ -27,28 +27,36 @@ function Login() {
     };
 
     return (
-        <div className="login">
-            <h2>Se Connecter</h2>
-            {error && <p className="error">{error}</p>}
-            <form onSubmit={handleLogin}>
-                <input 
-                    type="text" 
-                    placeholder="Nom d'utilisateur" 
-                    value={userName} 
-                    onChange={(e) => setUserName(e.target.value)} 
-                    required 
-                />
-                <input 
-                    type="password" 
-                    placeholder="Mot de passe" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    required 
-                />
-                <button type="submit" disabled={loading}>
-                    {loading ? "Connexion..." : "Connexion"}
+        <div className="login-container">
+            <div className="login">
+                <h2>Se Connecter</h2>
+                {error && <p className="error">{error}</p>}
+                <form onSubmit={handleLogin}>
+                    <input
+                        type="text"
+                        placeholder="Nom d'utilisateur"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        required />
+                    <input
+                        type="password"
+                        placeholder="Mot de passe"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required />
+                    <button type="submit" disabled={loading}>
+                        {loading ? "Connexion..." : "Connexion"}
+                    </button>
+                </form>
+            </div>
+
+            {/* ✅ Section Inscription placée sous le bloc de connexion */}
+            <div className="register-section">
+                <p className="signup-text">Pas encore de compte ?</p>
+                <button className="signup-button" onClick={() => navigate("/register")}>
+                    S'inscrire
                 </button>
-            </form>
+            </div>
         </div>
     );
 }
