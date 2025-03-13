@@ -1,0 +1,32 @@
+.gestion-partie {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.gestion-partie input {
+    width: 250px;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.gestion-partie button {
+    background-color: #c62828;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.gestion-partie button:hover {
+    background-color: #a61919;
+}
+
+.message {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+}

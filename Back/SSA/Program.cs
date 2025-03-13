@@ -6,12 +6,11 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-// Add services to the container.
-// The aim of this is to add API controllers to the application
+// Ajout des services pour les API controllers
 builder.Services.AddControllers();
 
+// Ajout des services CORS
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
@@ -19,7 +18,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:5173") // Mets l'URL de ton front-end
+                .WithOrigins("http://localhost:5173")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -27,11 +26,8 @@ builder.Services.AddCors(options =>
     );
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-// You as a developer can use Swagger to interact with the API through a web interface
+// Configuration Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition(
@@ -65,10 +61,12 @@ builder.Services.AddSwaggerGen(options =>
     );
 });
 
-// Add the database context to the application
-// This will allow the application to interact with the database
-builder.Services.AddDbContext<UserContext>();
+// 🔹 Enregistrement des contextes de base de données
+builder.Services.AddDbContext<UserContext>(); // Déjà existant
+builder.Services.AddDbContext<PartieContext>(); // ✅ Ajout de PartieContext
+builder.Services.AddScoped<PartieChefAuthorizationAttribute>();
 
+// Configuration de l’authentification JWT
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
@@ -91,7 +89,7 @@ var app = builder.Build();
 
 app.UseCors(MyAllowSpecificOrigins);
 
-// Configure the HTTP request pipeline.
+// Configuration du pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
