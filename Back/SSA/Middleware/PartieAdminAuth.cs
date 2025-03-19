@@ -15,7 +15,7 @@ public class PartieChefAuthorizationAttribute : Attribute, IAuthorizationFilter
         }
 
         var serviceProvider = context.HttpContext.RequestServices;
-        var dbContext = serviceProvider.GetRequiredService<PartieContext>();
+        var dbContext = serviceProvider.GetRequiredService<AppDbContext>();//chgmt ici attention
 
         if (!int.TryParse((string)context.RouteData.Values["id"], out int partieId))
         {

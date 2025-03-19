@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace SSA.Migrations.Partie
+namespace SSA.Migrations
 {
-    [DbContext(typeof(PartieContext))]
-    [Migration("20250311093046_CreatePartieTable")]
-    partial class CreatePartieTable
+    [DbContext(typeof(AppDbContext))]
+    [Migration("20250319150436_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,8 +24,12 @@ namespace SSA.Migrations.Partie
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AdminId")
+                    b.Property<int>("ChefId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -33,7 +37,7 @@ namespace SSA.Migrations.Partie
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdminId");
+                    b.HasIndex("ChefId");
 
                     b.ToTable("Parties");
                 });
@@ -75,13 +79,13 @@ namespace SSA.Migrations.Partie
 
             modelBuilder.Entity("Partie", b =>
                 {
-                    b.HasOne("Users", "Admin")
+                    b.HasOne("Users", "Chef")
                         .WithMany()
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ChefId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Admin");
+                    b.Navigation("Chef");
                 });
 
             modelBuilder.Entity("Users", b =>

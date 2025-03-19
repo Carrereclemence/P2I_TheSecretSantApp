@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -61,10 +62,20 @@ builder.Services.AddSwaggerGen(options =>
     );
 });
 
-// 🔹 Enregistrement des contextes de base de données
-builder.Services.AddDbContext<UserContext>(); // Déjà existant
-builder.Services.AddDbContext<PartieContext>(); // ✅ Ajout de PartieContext
+builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<PartieChefAuthorizationAttribute>();
+
+using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var entities = dbContext.Model.GetEntityTypes();
+
+    Console.WriteLine("📌 Entités détectées dans UserContext :");
+    foreach (var entity in entities)
+    {
+        Console.WriteLine($"- {entity.Name}");
+    }
+}
 
 // Configuration de l’authentification JWT
 var jwtSettings = builder.Configuration.GetSection("Jwt");

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,39 +7,63 @@ using Microsoft.EntityFrameworkCore;
 [Route("ApiParties/Parties")]
 public class PartieControllers : ControllerBase
 {
-    private readonly PartieContext _context;
+    // Un seul DbContext pour Parties et Users
+    private readonly AppDbContext _context;
     private readonly IConfiguration _configuration;
 
-    public PartieControllers(PartieContext context, IConfiguration configuration)
+    public PartieControllers(AppDbContext context, IConfiguration configuration)
     {
         _context = context;
         _configuration = configuration;
     }
 
-    // 🔹 GET : Récupérer toutes les parties (Admin uniquement)
+    // GET : Récupérer toutes les parties (Admin uniquement)
     [HttpGet]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<Partie>>> GetParties()
     {
-        var parties = await _context.Parties.ToListAsync();
+        var parties = await _context
+            .Parties.Include(p => p.Chef) // pour récupérer l'objet chef
+            .Include(p => p.Users) // pour récupérer la liste des participants
+            .ToListAsync();
+
+        // Projection manuelle vers un objet anonyme
         return Ok(
             parties.Select(p => new
             {
                 p.Id,
                 p.Code,
                 p.Name,
-                p.Chef,
-                p.Users,
+                Chef = new
+                {
+                    p.Chef.Id,
+                    p.Chef.UserName,
+                    p.Chef.FirstName,
+                    p.Chef.LastName,
+                },
+                Users = p
+                    .Users.Select(u => new
+                    {
+                        u.Id,
+                        u.UserName,
+                        u.FirstName,
+                        u.LastName,
+                    })
+                    .ToList(),
             })
         );
     }
 
-    // 🔹 GET : Récupérer une partie par son ID (Admin uniquement)
+    // GET : Récupérer une partie par son ID (Admin uniquement)
     [HttpGet("{id:int}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Partie>> GetPartieById(int id)
     {
-        var partie = await _context.Parties.FindAsync(id);
+        var partie = await _context
+            .Parties.Include(p => p.Chef)
+            .Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
         if (partie == null)
             return NotFound(new { message = "Partie non trouvée." });
 
@@ -48,73 +73,65 @@ public class PartieControllers : ControllerBase
                 partie.Id,
                 partie.Code,
                 partie.Name,
-                partie.Chef,
-                partie.Users,
+                Chef = new
+                {
+                    partie.Chef.Id,
+                    partie.Chef.UserName,
+                    partie.Chef.FirstName,
+                    partie.Chef.LastName,
+                },
+                Users = partie.Users.Select(u => new
+                {
+                    u.Id,
+                    u.UserName,
+                    u.FirstName,
+                    u.LastName,
+                }),
             }
         );
     }
 
-    // 🔹 POST : Créer une nouvelle partie (Uniquement pour les utilisateurs authentifiés)
+    // POST : Créer une nouvelle partie (authentifié)
     [HttpPost("create")]
     [Authorize]
     public async Task<ActionResult> CreatePartie([FromBody] PartieModel model)
     {
-        var username = User.Identity.Name; // 🔥 Récupère le username depuis le JWT
-        Console.WriteLine($"Nom utilisateur récupéré depuis le JWT : {username}"); // vérification
-
-        if (string.IsNullOrEmpty(username))
+        // Récupération de l'ID user stocké dans le token (si vous stockez bien ClaimTypes.NameIdentifier)
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!int.TryParse(userIdClaim, out int userId))
             return Unauthorized(new { message = "Utilisateur non identifié dans le JWT." });
 
-        var allUsers = await _context.Users.ToListAsync(); // 🔥 Charge tous les utilisateurs en mémoire
-        foreach (var u in allUsers)
-        {
-            Console.WriteLine($" - ID: {u.Id}, UserName: [{u.UserName}]");
-        }
-
-        var chef = allUsers.FirstOrDefault(u =>
-            u.UserName.Trim().ToLower() == username.Trim().ToLower()
-        );
-
-        Console.WriteLine(
-            $"📌 Résultat de la recherche : {chef?.UserName ?? "Aucun utilisateur trouvé"}"
-        );
-
-        Console.WriteLine($"Fyfuu :{chef}");
-
+        // Récupère l'utilisateur en base
+        var chef = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (chef == null)
-        {
-            Console.WriteLine("⚠️ L'utilisateur n'existe pas dans la base !");
             return Unauthorized(new { message = "Utilisateur non trouvé en base." });
-        }
 
+        // Crée la partie
         var newPartie = new Partie
         {
             Name = model.Name,
             Code = model.Code,
-            Chef = chef,
-            Users = new List<Users> { chef },
+            ChefId = chef.Id, // clé étrangère
+            Chef = chef, // navigation
         };
 
-        _context.Entry(chef).State = EntityState.Unchanged;
+        // Ajoute la nouvelle partie
+        _context.Parties.Add(newPartie);
+        await _context.SaveChangesAsync();
 
-        try
-        {
-            _context.Parties.Add(newPartie);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPartieById), new { id = newPartie.Id }, newPartie);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"❌ Erreur lors de la sauvegarde en base : {ex.Message}");
-            return StatusCode(500, new { message = "Erreur interne du serveur." });
-        }
+        // Facultatif : si vous voulez que le Chef soit dans la liste des participants
+        newPartie.Users.Add(chef);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetPartieById), new { id = newPartie.Id }, newPartie);
     }
 
-    // 🔹 POST : Rejoindre une partie
+    // POST : Rejoindre une partie (authentifié)
     [HttpPost("{id:int}/join")]
     [Authorize]
     public async Task<IActionResult> JoinPartie(int id)
     {
+        // Si vous stockez le pseudo (UserName) dans ClaimTypes.Name
         var username = User.Identity.Name;
         var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
 
@@ -128,16 +145,18 @@ public class PartieControllers : ControllerBase
         if (partie == null)
             return NotFound(new { message = "Partie non trouvée." });
 
-        if (partie.Users.Contains(user))
+        // Vérifie si l’utilisateur est déjà dans la liste
+        if (partie.Users.Any(u => u.Id == user.Id))
             return BadRequest(new { message = "Vous êtes déjà dans cette partie." });
 
+        // Ajoute dans la liste
         partie.Users.Add(user);
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Vous avez rejoint la partie avec succès." });
     }
 
-    // 🔹 DELETE : Supprimer une partie (seulement le chef de la partie)
+    // DELETE : Supprimer une partie (seulement le chef de la partie)
     [HttpDelete("{id:int}")]
     [Authorize]
     [ServiceFilter(typeof(PartieChefAuthorizationAttribute))]
@@ -153,7 +172,7 @@ public class PartieControllers : ControllerBase
     }
 }
 
-// ✅ Modèle pour la création de partie
+// Modèle pour POST create
 public class PartieModel
 {
     public string Code { get; set; }

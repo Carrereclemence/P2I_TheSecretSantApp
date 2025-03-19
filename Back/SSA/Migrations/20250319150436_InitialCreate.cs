@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace SSA.Migrations.Partie
+namespace SSA.Migrations
 {
     /// <inheritdoc />
-    public partial class CreatePartieTable : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +16,9 @@ namespace SSA.Migrations.Partie
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Code = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    AdminId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ChefId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,9 +49,9 @@ namespace SSA.Migrations.Partie
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parties_AdminId",
+                name: "IX_Parties_ChefId",
                 table: "Parties",
-                column: "AdminId");
+                column: "ChefId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_PartieId",
@@ -58,19 +59,19 @@ namespace SSA.Migrations.Partie
                 column: "PartieId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Parties_Users_AdminId",
+                name: "FK_Parties_Users_ChefId",
                 table: "Parties",
-                column: "AdminId",
+                column: "ChefId",
                 principalTable: "Users",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Parties_Users_AdminId",
+                name: "FK_Parties_Users_ChefId",
                 table: "Parties");
 
             migrationBuilder.DropTable(
