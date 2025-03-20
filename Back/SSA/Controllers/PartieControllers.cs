@@ -123,7 +123,32 @@ public class PartieControllers : ControllerBase
         newPartie.Users.Add(chef);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetPartieById), new { id = newPartie.Id }, newPartie);
+        return CreatedAtAction(
+            nameof(GetPartieById),
+            new { id = newPartie.Id },
+            new
+            {
+                newPartie.Id,
+                newPartie.Code,
+                newPartie.Name,
+                Chef = newPartie.Chef == null
+                    ? null
+                    : new
+                    {
+                        newPartie.Chef.Id,
+                        newPartie.Chef.UserName,
+                        newPartie.Chef.FirstName,
+                        newPartie.Chef.LastName,
+                    },
+                Users = newPartie.Users.Select(u => new
+                {
+                    u.Id,
+                    u.UserName,
+                    u.FirstName,
+                    u.LastName,
+                }),
+            }
+        );
     }
 
     // POST : Rejoindre une partie (authentifié)
@@ -153,7 +178,30 @@ public class PartieControllers : ControllerBase
         partie.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        return Ok(new { message = "Vous avez rejoint la partie avec succès." });
+        return Ok(
+            new
+            {
+                partie.Id,
+                partie.Code,
+                partie.Name,
+                Chef = partie.Chef == null
+                    ? null
+                    : new
+                    {
+                        partie.Chef.Id,
+                        partie.Chef.UserName,
+                        partie.Chef.FirstName,
+                        partie.Chef.LastName,
+                    },
+                Users = partie.Users.Select(u => new
+                {
+                    u.Id,
+                    u.UserName,
+                    u.FirstName,
+                    u.LastName,
+                }),
+            }
+        );
     }
 
     // DELETE : Supprimer une partie (seulement le chef de la partie)

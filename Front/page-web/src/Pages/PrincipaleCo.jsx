@@ -18,20 +18,24 @@ function PrincipaleCo() {
 
     // 🔹 Fonction pour créer une partie
     const handleCreatePartie = async () => {
-        console.log(user.firstName)
         if (!partieName.trim()) {
             setMessage("Veuillez entrer un nom de partie.");
             return;
         }
 
         try {
-            const response = await PartieApiService.createPartie(partieName);
+            const payload = { name: partieName };
+            // ApiService crée la partie et renvoie l'objet créé (incluant l'ID)
+            const response = await PartieApiService.createPartie(payload);
             setMessage(`🎉 Partie "${response.name}" créée avec succès !`);
             setPartieName("");
+            // Rediriger vers l'URL avec l'ID de la nouvelle partie
+            navigate(`/partie/${response.id}`);
         } catch (error) {
             setMessage(error.message);
         }
     };
+
 
     // 🔹 Fonction pour empêcher les valeurs négatives ou invalides
     const handlePartieIdChange = (e) => {
@@ -60,14 +64,16 @@ function PrincipaleCo() {
         }
 
         try {
-            await PartieApiService.joinPartie(partieId);
-            setMessage(`✅ Vous avez rejoint la partie #${partieId} !`);
+            const partie = await PartieApiService.joinPartie(partieId);
+            setMessage(`✅ Vous avez rejoint la partie #${partie.id} !`);
             setPartieId("");
-            navigate(`/partie/${partieId}`); // Redirige vers la page de la partie
+            // Rediriger vers l'URL paramétrée avec l'ID de la partie
+            navigate(`/partie/${partie.id}`);
         } catch (error) {
             setMessage(error.message);
         }
     };
+
 
     return (
         <div>
@@ -114,4 +120,4 @@ function PrincipaleCo() {
     );
 }
 
-export default PrincipaleCo;
+export default PrincipaleCo; 
