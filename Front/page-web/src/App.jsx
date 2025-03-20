@@ -5,7 +5,7 @@ import Principale from "./Pages/PrincipaleNonCo";
 import PrincipaleCo from "./Pages/PrincipaleCo";
 import Connection from "./Pages/Connection"
 import Inscription from "./Pages/Inscription";
-import PartieDetails from "./Pages/ParteiDetails";
+import PartieDetails from "./Pages/PartieDetails";
 
 function App() {
   const token = localStorage.getItem("token"); 

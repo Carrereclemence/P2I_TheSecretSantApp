@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import PartieApiService from "./../Services/ApiServicePartie"; // Assurez-vous du chemin
+import PartieApiService from "../Services/ApiServicePartie"; 
+import "./../styles/PartieDetails.css";  
 
 function PartieDetails() {
   const { id } = useParams();       // Récupère l'ID de la partie dans l'URL
@@ -24,7 +25,7 @@ function PartieDetails() {
   if (!partie) return <div>Partie introuvable.</div>;
 
   return (
-    <div>
+    <div className="partie-details">
       <h1>Partie : {partie.name}</h1>
       <p><strong>Code :</strong> {partie.code}</p>
       <p><strong>ID :</strong> {partie.id}</p>
