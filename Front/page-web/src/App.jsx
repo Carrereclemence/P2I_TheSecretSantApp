@@ -6,6 +6,7 @@ import PrincipaleCo from "./Pages/PrincipaleCo";
 import Connection from "./Pages/Connection"
 import Inscription from "./Pages/Inscription";
 import PartieDetails from "./Pages/PartieDetails";
+import MesGroupes from "./Pages/MesGroupes";
 
 function App() {
   const token = localStorage.getItem("token"); 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Connection />} />
         <Route path="/register" element={<Inscription />} /> 
         <Route path="/partie/:id" element={<PartieDetails />} />
+        <Route path="/mes-groupes" element={<MesGroupes />} /> 
       </Routes>
     </Router>
   );

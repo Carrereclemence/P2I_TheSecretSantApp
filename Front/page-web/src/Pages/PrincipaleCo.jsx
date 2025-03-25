@@ -6,7 +6,7 @@ import PartieApiService from "./../Services/ApiServicePartie";
 function PrincipaleCo() {
     const [user, setUser] = useState(null);
     const [partieName, setPartieName] = useState("");
-    const [partieId, setPartieId] = useState("");
+    const [partieCode, setPartieCode] = useState("");
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
@@ -36,43 +36,25 @@ function PrincipaleCo() {
         }
     };
 
-
-    // 🔹 Fonction pour empêcher les valeurs négatives ou invalides
-    const handlePartieIdChange = (e) => {
-        let value = e.target.value;
-        
-        // Si l'utilisateur efface tout, on autorise la valeur vide
-        if (value === "") {
-            setPartieId("");
-            return;
-        }
-
-        // Convertir en nombre
-        let numValue = Number(value);
-
-        // Vérifie que ce soit un entier positif
-        if (!isNaN(numValue) && Number.isInteger(numValue) && numValue >= 0) {
-            setPartieId(value);
-        }
-    };
-
-    // 🔹 Fonction pour rejoindre une partie
+   // 🔹 Fonction pour rejoindre une partie par code
     const handleJoinPartie = async () => {
-        if (!partieId.trim() || isNaN(Number(partieId)) || Number(partieId) < 0) {
-            setMessage("Veuillez entrer un ID de partie valide.");
+        if (!partieCode.trim()) {
+            setMessage("Veuillez entrer un code de partie valide.");
             return;
         }
 
         try {
-            const partie = await PartieApiService.joinPartie(partieId);
-            setMessage(`✅ Vous avez rejoint la partie #${partie.id} !`);
-            setPartieId("");
+            // Appel de l'API pour rejoindre la partie en utilisant le code
+            const partie = await PartieApiService.joinPartie(partieCode);
+            setMessage(`✅ Vous avez rejoint la partie "${partie.name}" !`);
+            setPartieCode("");
             // Rediriger vers l'URL paramétrée avec l'ID de la partie
             navigate(`/partie/${partie.id}`);
         } catch (error) {
             setMessage(error.message);
         }
     };
+
 
 
     return (
@@ -83,7 +65,7 @@ function PrincipaleCo() {
                     <h2>Bonjour {user.firstName} {user.lastName} !</h2>
                     <p>Votre pseudo : {user.userName}</p>
                     <p>Statut : {user.admin ? "Administrateur" : "Utilisateur"}</p>
-                    <button onClick={() => navigate("/mon-groupe")}>Voir mon groupe Secret Santa</button>
+                    <button onClick={() => navigate("/mes-groupes")}>Voir mon groupe Secret Santa</button>
 
                     {/* 🔹 Ajout des boutons de gestion des parties */}
                     <div className="gestion-partie">
@@ -100,14 +82,14 @@ function PrincipaleCo() {
                     <div className="gestion-partie">
                         <h3>Rejoindre une Partie</h3>
                         <input
-                            type="number"
-                            placeholder="ID de la partie"
-                            value={partieId}
-                            onChange={handlePartieIdChange}
-                            min="0"
-                            step="1"
+                            type="text"
+                            placeholder="Code de la partie"
+                            value={partieCode}
+                            onChange={(e) => setPartieCode(e.target.value)}
                         />
-                        <button onClick={handleJoinPartie} disabled={partieId === ""}>Rejoindre</button>
+                        <button onClick={handleJoinPartie} disabled={!partieCode.trim()}>
+                            Rejoindre
+                        </button>
                     </div>
 
                     {/* 🔹 Affichage des messages d'action */}

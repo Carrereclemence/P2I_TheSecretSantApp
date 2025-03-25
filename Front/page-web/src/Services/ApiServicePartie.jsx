@@ -11,6 +11,11 @@ class PartieApiService {
     return this.fetchFromApi(`${partieEndpoint}/${id}`, "GET");
   }
 
+  // Récupérer toutes les parties de l'utilisateur connecté
+  async getMyParties() {
+    return this.fetchFromApi(`${partieEndpoint}/my-parties`, "GET");
+  }
+
   // 🔹 Créer une partie
   async createPartie(payload) {
     // Si le payload ne contient pas de code, on le génère automatiquement
@@ -21,9 +26,10 @@ class PartieApiService {
   }
 
   // 🔹 Rejoindre une partie
-  async joinPartie(id) {
-    return this.fetchFromApi(`${partieEndpoint}/${id}/join`, "POST");
-  }
+ async joinPartie(code) {
+  return this.fetchFromApi(`${partieEndpoint}/join`, "POST", { code });
+}
+
 
   // 🔹 Supprimer une partie
   async deletePartie(id) {
