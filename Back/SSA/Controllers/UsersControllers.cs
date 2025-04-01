@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 [Route("ApiUsers/Users")]
 public class UsersControllers : ControllerBase
 {
-    // Remplacez l'ancien UserContext par AppDbContext
     private readonly AppDbContext _context;
     private readonly IConfiguration _configuration;
 
@@ -25,7 +24,6 @@ public class UsersControllers : ControllerBase
     [Authorize]
     public async Task<ActionResult> GetCurrentUser()
     {
-        // On récupère le nom d'utilisateur stocké dans ClaimTypes.Name
         var username = User.Identity.Name;
         var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
 
@@ -97,7 +95,7 @@ public class UsersControllers : ControllerBase
             UserName = model.UserName,
             FirstName = model.FirstName,
             LastName = model.LastName,
-            Password = model.Password, // (en clair, non sécurisé, juste un exemple)
+            Password = model.Password, 
             Admin = model.Admin,
         };
 
@@ -179,8 +177,8 @@ public class UsersControllers : ControllerBase
         };
 
         var token = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"], // Issuer
-            _configuration["Jwt:Issuer"], // Audience
+            _configuration["Jwt:Issuer"],
+            _configuration["Jwt:Issuer"],
             claims,
             expires: DateTime.Now.AddHours(3),
             signingCredentials: credentials

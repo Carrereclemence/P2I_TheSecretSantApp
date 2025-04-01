@@ -39,6 +39,21 @@ namespace SSA.Migrations
                     b.ToTable("Parties");
                 });
 
+            modelBuilder.Entity("PartieUsers", b =>
+                {
+                    b.Property<int>("PartieId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PartieId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("PartieUsers");
+                });
+
             modelBuilder.Entity("Users", b =>
                 {
                     b.Property<int>("Id")
@@ -56,9 +71,6 @@ namespace SSA.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PartieId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -68,8 +80,6 @@ namespace SSA.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PartieId");
 
                     b.ToTable("Users");
                 });
@@ -85,16 +95,19 @@ namespace SSA.Migrations
                     b.Navigation("Chef");
                 });
 
-            modelBuilder.Entity("Users", b =>
+            modelBuilder.Entity("PartieUsers", b =>
                 {
                     b.HasOne("Partie", null)
-                        .WithMany("Users")
-                        .HasForeignKey("PartieId");
-                });
+                        .WithMany()
+                        .HasForeignKey("PartieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("Partie", b =>
-                {
-                    b.Navigation("Users");
+                    b.HasOne("Users", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -25,12 +25,15 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Exemple de relation “Partie a un Chef (Users)”
+        // Partie - Chef
         modelBuilder
             .Entity<Partie>()
             .HasOne(p => p.Chef)
-            .WithMany() // un même user peut être chef de plusieurs parties
+            .WithMany()
             .HasForeignKey(p => p.ChefId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Partie - Users (many-to-many)
+        modelBuilder.Entity<Partie>().HasMany(p => p.Users).WithMany(); // Pas de colonne PartieId dans Users, tout est géré via table de jointure
     }
 }

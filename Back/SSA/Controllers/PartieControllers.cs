@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 [Route("ApiParties/Parties")]
 public class PartieControllers : ControllerBase
 {
-    // Un seul DbContext pour Parties et Users
     private readonly AppDbContext _context;
     private readonly IConfiguration _configuration;
 
@@ -23,8 +22,8 @@ public class PartieControllers : ControllerBase
     public async Task<ActionResult<IEnumerable<Partie>>> GetParties()
     {
         var parties = await _context
-            .Parties.Include(p => p.Chef) // pour récupérer l'objet chef
-            .Include(p => p.Users) // pour récupérer la liste des participants
+            .Parties.Include(p => p.Chef)
+            .Include(p => p.Users)
             .ToListAsync();
 
         // Projection manuelle vers un objet anonyme
@@ -54,7 +53,7 @@ public class PartieControllers : ControllerBase
         );
     }
 
-    // GET : Récupérer une partie par son ID 
+    // GET : Récupérer une partie par son ID
     [HttpGet("{id:int}")]
     [Authorize]
     public async Task<ActionResult<Partie>> GetPartieById(int id)
@@ -164,7 +163,7 @@ public class PartieControllers : ControllerBase
         _context.Parties.Add(newPartie);
         await _context.SaveChangesAsync();
 
-        // Facultatif : si vous voulez que le Chef soit dans la liste des participants
+        // Ajout de Chef dans la liste des participants
         newPartie.Users.Add(chef);
         await _context.SaveChangesAsync();
 
