@@ -253,7 +253,7 @@ public class PartieControllers : ControllerBase
     }
 
     // POST : Tirage au sort (seulement le chef de la partie)
-    /*[HttpPost("{id:int}/tirage")]
+    [HttpPost("{id:int}/tirage")]
     [Authorize]
     [ServiceFilter(typeof(PartieChefAuthorizationAttribute))]
     public async Task<IActionResult> TirageSecretSanta(int id)
@@ -266,33 +266,73 @@ public class PartieControllers : ControllerBase
             return NotFound(new { message = "Partie non trouvée." });
 
         var participants = partie.Users;
-
-        // Vérifie qu'il y ait au moins 2 participants
         if (participants.Count < 2)
-            return BadRequest(new { message = "Pas assez de participants pour le tirage." });
+            return BadRequest(new { message = "Pas assez de participants." });
 
-        var shuffled = participants.OrderBy(x => Guid.NewGuid()).ToList();
-        var pairs = new Dictionary<int, int>();
+        // Supprimer les anciens tirages si existants
+        var anciensTirages = _context.Tirages.Where(t => t.PartieId == id);
+        _context.Tirages.RemoveRange(anciensTirages);
+
+        // Création des nouvelles paires
+        var shuffled = participants.OrderBy(p => Guid.NewGuid()).ToList();
+        var tirages = new List<Tirage>();
 
         for (int i = 0; i < shuffled.Count; i++)
         {
-            var giver = shuffled[i];
-            var receiver = shuffled[(i + 1) % shuffled.Count]; // boucle sur elle-même
-            pairs[giver.Id] = receiver.Id;
+            var offr = shuffled[i];
+            var dest = shuffled[(i + 1) % shuffled.Count];
+
+            tirages.Add(
+                new Tirage
+                {
+                    PartieId = id,
+                    OffrantId = offr.Id,
+                    DestinataireId = dest.Id,
+                }
+            );
         }
 
-        partie.SecretSantaPairs = pairs;
+        _context.Tirages.AddRange(tirages);
         await _context.SaveChangesAsync();
 
-        // Retourne les paires créées
         return Ok(
-            pairs.Select(pair => new
+            tirages.Select(t => new
             {
-                Offrant = participants.First(u => u.Id == pair.Key).UserName,
-                Destinataire = participants.First(u => u.Id == pair.Value).UserName,
+                Offrant = participants.First(p => p.Id == t.OffrantId).UserName,
+                Destinataire = participants.First(p => p.Id == t.DestinataireId).UserName,
             })
         );
-    }*/
+    }
+
+    // GET : Destinataire du mon cadeau
+    [HttpGet("{id:int}/mon-destinataire")]
+    [Authorize]
+    public async Task<IActionResult> GetDestinataire(int id)
+    {
+        var username = User.Identity.Name;
+        var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
+        if (user == null)
+            return Unauthorized();
+
+        var destinataire = await _context
+            .Tirages.Include(t => t.Destinataire)
+            .FirstOrDefaultAsync(t => t.PartieId == id && t.OffrantId == user.Id);
+
+        if (destinataire == null)
+            return NotFound(
+                new { message = "Aucun destinataire trouvé pour vous dans cette partie." }
+            );
+
+        return Ok(
+            new
+            {
+                destinataire.Destinataire.Id,
+                destinataire.Destinataire.UserName,
+                destinataire.Destinataire.FirstName,
+                destinataire.Destinataire.LastName,
+            }
+        );
+    }
 
     // DELETE : Supprimer une partie (seulement le chef de la partie)
     [HttpDelete("{id:int}")]

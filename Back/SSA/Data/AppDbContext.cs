@@ -7,6 +7,7 @@ public class AppDbContext : DbContext
 
     // Déclare la table des parties
     public DbSet<Partie> Parties { get; set; } = null!;
+    public DbSet<Tirage> Tirages { get; set; } = null!;
 
     private readonly string _connectionString;
 
@@ -34,6 +35,14 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         // Partie - Users (many-to-many)
-        modelBuilder.Entity<Partie>().HasMany(p => p.Users).WithMany(); // Pas de colonne PartieId dans Users, tout est géré via table de jointure
+        modelBuilder.Entity<Partie>().HasMany(p => p.Users).WithMany();
+
+        //Partie - Tirage
+        modelBuilder
+            .Entity<Tirage>()
+            .HasOne(t => t.Partie)
+            .WithMany()
+            .HasForeignKey(t => t.PartieId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

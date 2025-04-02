@@ -66,3 +66,30 @@
     font-size: 18px;
     margin-top: 20px;
 }
+
+.destinataire-section {
+    background-color: #f7f7f7;
+    padding: 16px;
+    margin-top: 20px;
+    border-left: 5px solid #d19b63;
+    border-radius: 8px;
+}
+
+.tirage-section {
+    margin-top: 20px;
+    padding: 16px;
+    border: 2px dashed #095d40;
+    border-radius: 10px;
+    background-color: #f2fff5;
+    text-align: center;
+}
+
+.tirage-section button {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    background-color: #095d40;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

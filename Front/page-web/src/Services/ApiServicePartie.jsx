@@ -26,15 +26,20 @@ class PartieApiService {
   }
 
   // 🔹 Rejoindre une partie
- async joinPartie(code) {
-  return this.fetchFromApi(`${partieEndpoint}/join`, "POST", { code });
-}
-
+  async joinPartie(code) {
+    return this.fetchFromApi(`${partieEndpoint}/join`, "POST", { code });
+  }
 
   // 🔹 Supprimer une partie
   async deletePartie(id) {
     return this.fetchFromApi(`${partieEndpoint}/${id}`, "DELETE");
   }
+
+  // 🔹 Récupérer le destinataire du tirage pour l'utilisateur connecté
+  async getMonDestinataire(partieId) {
+    return this.fetchFromApi(`${partieEndpoint}/${partieId}/mon-destinataire`, "GET");
+  }
+
 
   // 🔹 Fonction générique pour appeler l'API
   async fetchFromApi(url, method = "GET", body = null) {
