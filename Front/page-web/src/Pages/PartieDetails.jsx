@@ -5,7 +5,7 @@ import PartieApiService from "../Services/ApiServicePartie";
 import "./../styles/PartieDetails.css";  
 
 function PartieDetails() {
-  const { id } = useParams();       // Récupère l'ID de la partie dans l'URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const [partie, setPartie] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -111,9 +111,31 @@ function PartieDetails() {
         </div>
       )}
 
+      <div className="delete-section">
+        <h3>🗑 Supprimer cette partie</h3>
+        <button
+          style={{ backgroundColor: "red", color: "white" }}
+          onClick={async () => {
+            if (window.confirm("Es-tu sûr de vouloir supprimer cette partie ?")) {
+              try {
+                await PartieApiService.deletePartie(partie.id);
+                alert("Partie supprimée !");
+                navigate("/mes-groupes");
+              } catch (err) {
+                alert("Erreur lors de la suppression : " + err.message);
+              }
+            }
+          }}
+        >
+          Supprimer la partie
+        </button>
+      </div>
+
       {/* Bouton OK pour revenir à la page principale */}
-      <button onClick={() => navigate("/")}>OK</button>
+      <button onClick={() => navigate("/")}>Retour</button>
+
     </div>
+    
   );
 }
 

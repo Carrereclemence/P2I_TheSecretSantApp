@@ -24,12 +24,15 @@ function Header() {
 
       <div className="login-icon">
         {token ? (
-                    <button onClick={handleLogout}>Se Déconnecter</button>
-                ) : (
-                    <a href="/login">
-                        <FaUserCircle size={32} color="white" />
-                    </a>
-                )}
+          <>
+            <button onClick={() => navigate("/profil")}>Mon Profil</button>
+            <button onClick={handleLogout}>Se Déconnecter</button>
+          </>
+        ) : (
+          <a href="/login">
+            <FaUserCircle size={32} color="white" />
+          </a>
+        )}
       </div>
     </header>
   );

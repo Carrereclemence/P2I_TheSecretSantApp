@@ -51,7 +51,7 @@ class ApiService {
     return this.fetchFromApi(`${rootEndpoint}/${id}`, "GET");
   }
 
-  // 🔹 Mettre à jour un utilisateur (Admin uniquement)
+  // 🔹 Mettre à jour un utilisateur
   async updateUser(id, user) {
     return this.fetchFromApi(`${rootEndpoint}/${id}`, "PUT", user);
   }

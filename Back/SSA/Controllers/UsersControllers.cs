@@ -127,18 +127,20 @@ public class UsersControllers : ControllerBase
 
     // 🔄 PUT: Modifier un utilisateur (Admin uniquement)
     [HttpPut("{id:int}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserModel model)
     {
         var user = await _context.Users.FindAsync(id);
         if (user == null)
             return NotFound(new { message = "Utilisateur non trouvé." });
 
-        // Mise à jour uniquement des champs envoyés
         user.FirstName = model.FirstName ?? user.FirstName;
         user.LastName = model.LastName ?? user.LastName;
-        user.Password = model.Password ?? user.Password;
-        user.Admin = model.Admin;
+        user.Password = string.IsNullOrWhiteSpace(model.Password) ? user.Password : model.Password;
+
+        // Ne met à jour Admin que s'il est fourni
+        if (model.Admin.HasValue)
+            user.Admin = model.Admin.Value;
 
         await _context.SaveChangesAsync();
         return NoContent();
@@ -206,8 +208,8 @@ public class RegisterModel
 
 public class UpdateUserModel
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Password { get; set; }
-    public bool Admin { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? Password { get; set; }
+    public bool? Admin { get; set; }
 }
