@@ -70,72 +70,70 @@ function PartieDetails() {
     <div className="partie-details">
       <h1>Partie : {partie.name}</h1>
       <p><strong>Code :</strong> {partie.code}</p>
-      <p><strong>ID :</strong> {partie.id}</p>
 
-      <h3>Chef de la partie</h3>
-      {partie.chef ? (
-        <p>
-          {partie.chef.firstName} {partie.chef.lastName} ({partie.chef.userName})
-        </p>
-      ) : (
-        <p>Aucun chef attribué.</p>
-      )}
+      <div className="blocks-wrapper">
+        {/* 🔹 Bloc Chef */}
+        <div className="info-block">
+          <h3>👑 Chef de la partie</h3>
+          {partie.chef ? (
+            <p>{partie.chef.firstName} {partie.chef.lastName} ({partie.chef.userName})</p>
+          ) : (
+            <p>Aucun chef attribué.</p>
+          )}
+        </div>
 
-      <h3>Participants</h3>
-      <ul>
-        {partie.users && partie.users.length ? (
-          partie.users.map((u) => (
-            <li key={u.id}>
-              {u.firstName} {u.lastName} ({u.userName})
-            </li>
-          ))
-        ) : (
-          <li>Aucun participant pour le moment.</li>
+        {/* 🔹 Bloc Participants */}
+        <div className="info-block">
+          <h3>👥 Participants</h3>
+          <ul>
+            {partie.users && partie.users.length ? (
+              partie.users.map((u) => (
+                <li key={u.id}>
+                  {u.firstName} {u.lastName} ({u.userName})
+                </li>
+              ))
+            ) : (
+              <li>Aucun participant pour le moment.</li>
+            )}
+          </ul>
+        </div>
+
+        {/* 🔹 Bloc Destinataire */}
+        {destinataire && (
+          <div className="info-block">
+            <h3>🎁 Ton destinataire</h3>
+            <p><strong>{destinataire.firstName} {destinataire.lastName}</strong> ({destinataire.userName})</p>
+          </div>
         )}
-      </ul>
 
-      {isChef && (
-        <div className="tirage-section">
-          <h3>🔄 Effectuer le tirage Secret Santa</h3>
-          <button onClick={handleTirage}>🎁 Tirer au sort</button>
-        </div>
-      )}
-
-
-      {destinataire && (
-        <div className="destinataire-section">
-          <h3>🎁 La personne à qui tu dois offrir un cadeau :</h3>
-          <p>
-            <strong>{destinataire.firstName} {destinataire.lastName}</strong> ({destinataire.userName})
-          </p>
-        </div>
-      )}
-
-      <div className="delete-section">
-        <h3>🗑 Supprimer cette partie</h3>
-        <button
-          style={{ backgroundColor: "red", color: "white" }}
-          onClick={async () => {
-            if (window.confirm("Es-tu sûr de vouloir supprimer cette partie ?")) {
-              try {
-                await PartieApiService.deletePartie(partie.id);
-                alert("Partie supprimée !");
-                navigate("/mes-groupes");
-              } catch (err) {
-                alert("Erreur lors de la suppression : " + err.message);
-              }
-            }
-          }}
-        >
-          Supprimer la partie
-        </button>
+        {/* 🔹 Bloc Admin */}
+        {isChef && (
+          <div className="info-block admin-actions">
+            <h3>⚙️ Actions admin</h3>
+            <button onClick={handleTirage}>🎁 Tirer au sort</button>
+            <button
+              className="btn-supprimer"
+              onClick={async () => {
+                if (window.confirm("Es-tu sûr de vouloir supprimer cette partie ?")) {
+                  try {
+                    await PartieApiService.deletePartie(partie.id);
+                    alert("Partie supprimée !");
+                    navigate("/mes-groupes");
+                  } catch (err) {
+                    alert("Erreur lors de la suppression : " + err.message);
+                  }
+                }
+              }}
+            >
+              🗑 Supprimer la partie
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Bouton OK pour revenir à la page principale */}
-      <button onClick={() => navigate("/")}>Retour</button>
-
+      {/* 🔹 Bouton Retour */}
+      <button onClick={() => navigate("/")}>⬅️ Retour</button>
     </div>
-    
   );
 }
 

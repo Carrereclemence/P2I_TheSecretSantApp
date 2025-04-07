@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ApiService from "../Services/ApiService";
+import "./../styles/Profil.css"; 
+
 
 function MonProfil() {
   const [user, setUser] = useState(null);
@@ -41,38 +43,42 @@ function MonProfil() {
   if (!user) return <div>Chargement...</div>;
 
   return (
-    <div>
-      <h1>Mon Profil</h1>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>Prénom :</label>
-        <input
-          type="text"
-          value={form.firstName}
-          onChange={(e) => setForm({ ...form, firstName: e.target.value })}
-          required
-        />
+    <div className="profil-container">
+      <div className="profil-box">
+        <h1>Mon Profil</h1>
+        {message && <p className="message">{message}</p>}
 
-        <label>Nom :</label>
-        <input
-          type="text"
-          value={form.lastName}
-          onChange={(e) => setForm({ ...form, lastName: e.target.value })}
-          required
-        />
+        <form onSubmit={handleSubmit}>
+          <label>Prénom :</label>
+          <input
+            type="text"
+            value={form.firstName}
+            onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+            required
+          />
 
-        <label>Nouveau mot de passe :</label>
-        <input
-          type="password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          placeholder="Laisser vide pour ne pas changer"
-        />
+          <label>Nom :</label>
+          <input
+            type="text"
+            value={form.lastName}
+            onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+            required
+          />
 
-        <button type="submit">Enregistrer</button>
-      </form>
+          <label>Nouveau mot de passe :</label>
+          <input
+            type="password"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            placeholder="Laisser vide pour ne pas changer"
+          />
+
+          <button type="submit">Enregistrer</button>
+        </form>
+      </div>
     </div>
   );
+
 }
 
 export default MonProfil;

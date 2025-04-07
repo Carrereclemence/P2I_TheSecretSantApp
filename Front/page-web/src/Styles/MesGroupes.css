@@ -1,0 +1,125 @@
+/* ✅ CONTAINER PRINCIPAL */
+.groupes-container {
+    display: flex;
+    width: 100vw;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 9vh;
+    min-height: 100vh;
+    background-color: #fff;
+}
+
+/* ✅ TITRE DE LA PAGE */
+.groupes-container h1 {
+    font-size: 2.5rem;
+    color: #c62828;
+    margin-bottom: 4vh;
+    text-align: center;
+}
+
+/* ✅ WRAPPER FLEX DES BLOCS */
+.groupes-flex {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2vw;
+        width: 100vw;
+        padding: 0 2vw;
+        box-sizing: border-box;
+    }
+
+/* ✅ CARTE DE CHAQUE PARTIE */
+.groupe-card {
+    width: 28%;
+    min-width: 280px;
+    background-color: #f0f0f0;
+    padding: 1.8vh 1.2vw;
+    border-radius: 1.5vh;
+    margin-bottom: 4vh;
+    box-shadow: 0.2vw 0.2vw 1vw rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.groupe-card:hover {
+    transform: scale(1.02);
+}
+
+/* ✅ TITRE DU GROUPE */
+.groupe-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1vh;
+    color: #333;
+}
+
+/* ✅ INFOS DU GROUPE */
+.groupe-card p {
+    margin: 0.5vh 0;
+    font-size: 1rem;
+    color: #444;
+}
+
+/* ✅ LISTE DES PARTICIPANTS */
+.groupe-card ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1vh;
+}
+
+.groupe-card li {
+    font-size: 0.95rem;
+    padding: 0.3vh 0;
+}
+
+/* ✅ BOUTON DÉTAILS */
+.groupe-card button {
+    margin-top: 2vh;
+    padding: 1.2vh 2.5vw;
+    font-size: 1rem;
+    background-color: #c62828;
+    color: white;
+    border: none;
+    border-radius: 1vh;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s ease-in-out;
+}
+
+.groupe-card button:hover {
+    background-color: #a61919;
+    transform: scale(1.05);
+}
+
+/* 🔹 RESPONSIVE */
+@media (max-width: 900px) {
+    .groupe-card {
+        flex: 1 1 calc(50% - 2vw);
+        max-width: calc(50% - 2vw);
+    }
+}
+
+@media (max-width: 768px) {
+    .groupes-container h1 {
+        font-size: 2rem;
+    }
+
+    .groupe-card {
+        padding: 2vh 2vw;
+    }
+
+    .groupe-card h2 {
+        font-size: 1.3rem;
+    }
+
+    .groupe-card button {
+        font-size: 0.9rem;
+        padding: 1vh 2vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .groupe-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}

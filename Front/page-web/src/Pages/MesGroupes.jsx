@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PartieApiService from '../Services/ApiServicePartie';
+import "./../styles/MesGroupes.css";
 
 function MesGroupes() {
   const [parties, setParties] = useState([]);
@@ -25,29 +26,32 @@ function MesGroupes() {
     return <div>{message || "Vous n'êtes dans aucune partie."}</div>;
 
   return (
-    <div>
+    <div className="groupes-container">
       <h1>Mes Groupes Secret Santa</h1>
-      {parties.map((party) => (
-         <div key={party.id} style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}>
-           <h2>{party.name}</h2>
-           <p><strong>Code :</strong> {party.code}</p>
-           <p>
-             <strong>Chef :</strong>{" "}
-             {party.chef ? `${party.chef.firstName} ${party.chef.lastName}` : "Non défini"}
-           </p>
-           <h3>Participants :</h3>
-           <ul>
-             {party.users.map((user) => (
-               <li key={user.id}>
-                 {user.firstName} {user.lastName} ({user.userName})
-               </li>
-             ))}
-           </ul>
-           <button onClick={() => navigate(`/partie/${party.id}`)}>
-             Voir les détails de la partie
-           </button>
-         </div>
-      ))}
+
+      <div className="groupes-flex">
+        {parties.map((party) => (
+          <div key={party.id} className="groupe-card">
+            <h2>{party.name}</h2>
+            <p><strong>Code :</strong> {party.code}</p>
+            <p>
+              <strong>Chef :</strong>{" "}
+              {party.chef ? `${party.chef.firstName} ${party.chef.lastName}` : "Non défini"}
+            </p>
+            <h3>Participants :</h3>
+            <ul>
+              {party.users.map((user) => (
+                <li key={user.id}>
+                  {user.firstName} {user.lastName} ({user.userName})
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => navigate(`/partie/${party.id}`)}>
+              Voir les détails de la partie
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

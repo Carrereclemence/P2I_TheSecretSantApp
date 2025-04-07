@@ -1,95 +1,117 @@
-/* Styles pour la page PartieDetails */
+/* ✅ CONTAINER PRINCIPAL CENTRÉ */
 .partie-details {
-    margin-top: 20px;
+    width: 100vw;
+    margin: 0 auto;
+    padding-top: 12vh;
+    background-color: #fff;
     text-align: center;
-    font-family: Arial, sans-serif;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    align-items: center;
 }
 
+/* ✅ TITRE ET CODE */
 .partie-details h1 {
+    font-size: 2.5rem;
     color: #c62828;
-    margin-bottom: 20px;
+    margin-bottom: 1vh;
 }
 
-.partie-details h3 {
+.partie-details>p {
+    font-size: 1.1rem;
+    margin-bottom: 4vh;
+    color: #444;
+}
+
+/* ✅ WRAPPER POUR CENTRER LES BLOCS */
+.blocks-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* ✅ centre les .info-block horizontalement */
+    gap: 3vh;
+}
+
+/* ✅ BLOCS INDIVIDUELS */
+.info-block {
+    width: 30%;
+    background-color: #f0f0f0;
+    border-radius: 2vh;
+    padding: 3vh 2vw;
+    margin-bottom: 4vh;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    text-align: left;
+}
+
+/* ✅ TITRE DE BLOC */
+.info-block h3 {
+    margin-bottom: 1vh;
     color: #333;
-    margin-top: 30px;
-    margin-bottom: 10px;
+    font-size: 1.2rem;
 }
 
-.partie-details p {
-    font-size: 16px;
-    margin: 5px 0;
+/* ✅ LISTE DES PARTICIPANTS SANS PUCE */
+.info-block ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
 }
 
-.partie-details ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 20px auto;
-    max-width: 400px;
-}
-
-.partie-details ul li {
-    background-color: #ffffff;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin: 8px auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
+.info-block li {
+    font-size: 1rem;
     color: #333;
-    font-weight: 600;
-    text-align: center;
+    margin: 0.4vh 0;
 }
 
-.partie-details button {
+/* ✅ BOUTONS */
+button {
     background-color: #c62828;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 1.2vh 2.5vw;
+    border-radius: 1vh;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s;
-    margin-top: 20px;
+    font-size: 1rem;
+    margin-top: 2vh;
+    transition: background 0.3s, transform 0.2s ease-in-out;
 }
 
-.partie-details button:hover {
+button:hover {
     background-color: #a61919;
+    transform: scale(1.05);
 }
 
-/* Messages d'état */
-.loading,
-.not-found {
-    color: #666;
-    font-size: 18px;
-    margin-top: 20px;
+/* ✅ BOUTON SUPPRESSION */
+.btn-supprimer {
+    background-color: red;
 }
 
-.destinataire-section {
-    background-color: #f7f7f7;
-    padding: 16px;
-    margin-top: 20px;
-    border-left: 5px solid #d19b63;
-    border-radius: 8px;
+.btn-supprimer:hover {
+    background-color: darkred;
 }
 
-.tirage-section {
-    margin-top: 20px;
-    padding: 16px;
-    border: 2px dashed #095d40;
-    border-radius: 10px;
-    background-color: #f2fff5;
-    text-align: center;
+/* ✅ ACTIONS ADMIN */
+.admin-actions button {
+    display: block;
+    width: 100%;
+    margin-top: 1vh;
 }
 
-.tirage-section button {
-    padding: 10px 20px;
-    font-weight: bold;
-    border-radius: 8px;
-    background-color: #095d40;
-    color: white;
-    border: none;
-    cursor: pointer;
+/* ✅ RETOUR */
+.partie-details>button:last-of-type {
+    margin-top: 4vh;
+}
+
+/* 🔹 RESPONSIVE DOUX */
+@media (max-width: 768px) {
+    .partie-details h1 {
+        font-size: 2rem;
+    }
+
+    .info-block {
+        padding: 2.5vh 2vw;
+    }
+
+    button {
+        font-size: 0.95rem;
+        padding: 1vh 2vw;
+    }
 }

@@ -1,0 +1,131 @@
+/* ✅ CONTAINER PRINCIPAL DE LA PAGE PROFIL */
+.profil-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* ✅ Encadré profil */
+.profil-box {
+    width: 40vw;
+    max-width: 400px;
+    padding: 3vh;
+    background-color: #f0f0f0;
+    border-radius: 2vh;
+    box-shadow: 0.2vw 0.2vw 1vw rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ✅ TITRE DE LA PAGE PROFIL */
+.profil-box h1 {
+    font-size: 2rem;
+    color: #c62828;
+    margin-top: 1vh;
+    margin-bottom: 3vh;
+}
+
+/* ✅ MESSAGE D'INFO */
+.message {
+    font-size: 1rem;
+    color: green;
+    margin-bottom: 2vh;
+}
+
+/* ✅ MESSAGE D'ERREUR */
+.error {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 2vh;
+}
+
+/* ✅ FORMULAIRE */
+.profil-box form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+    width: 100%;
+}
+
+/* ✅ LABELS */
+.profil-box label {
+    font-weight: bold;
+    color: #333;
+    align-self: flex-start;
+    margin-left: 2.5%;
+}
+
+/* ✅ CHAMPS DE SAISIE */
+.profil-box input {
+    width: 95%;
+    padding: 1.5vh;
+    font-size: 1rem;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+}
+
+/* ✅ BOUTON "Enregistrer" */
+.profil-box button {
+    background-color: #c62828 !important;
+    color: white !important;
+    padding-top: 10vh;
+    border: none;
+    padding: 1.5vh;
+    font-size: 1.2rem;
+    border-radius: 1vh;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    width: 95%;
+}
+
+.profil-box button:hover:not(:disabled) {
+    transform: scale(1.05);
+}
+
+/* 🔹 TABLETTES */
+@media (max-width: 1024px) {
+    .profil-box {
+        width: 45vw;
+        padding: 2.5vh;
+    }
+
+    .profil-box h1 {
+        font-size: 1.8rem;
+    }
+
+    .profil-box input {
+        padding: 1.2vh;
+    }
+
+    .profil-box button {
+        font-size: 1.1rem;
+        padding: 1.3vh;
+    }
+}
+
+/* 🔹 TÉLÉPHONES */
+@media (max-width: 768px) {
+    .profil-box {
+        width: 80vw;
+    }
+
+    .profil-box h1 {
+        font-size: 1.6rem;
+    }
+
+    .profil-box input {
+        font-size: 1rem;
+        padding: 1vh;
+    }
+
+    .profil-box button {
+        font-size: 1rem;
+        padding: 1.2vh;
+    }
+}
