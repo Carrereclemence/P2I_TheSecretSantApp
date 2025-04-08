@@ -8,6 +8,7 @@ import Inscription from "./Pages/Inscription";
 import PartieDetails from "./Pages/PartieDetails";
 import MesGroupes from "./Pages/MesGroupes";
 import MonProfil from "./Pages/Profil"
+import PageAdmin from "./Pages/PageAdmin";
 
 function App() {
   const token = localStorage.getItem("token"); 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/partie/:id" element={<PartieDetails />} />
         <Route path="/mes-groupes" element={<MesGroupes />} /> 
         <Route path="/profil" element={<MonProfil />} />
+        <Route path="/admin" element={<PageAdmin />} />
       </Routes>
     </Router>
   );

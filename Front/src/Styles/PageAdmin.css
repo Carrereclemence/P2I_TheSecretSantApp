@@ -1,0 +1,28 @@
+.admin-container {
+    padding: 2rem;
+    width: 100vw;
+    margin: auto;
+    margin-top: 9vh;
+    text-align: center;
+    align-items: center;
+}
+
+.admin-container h1 {
+    color: #095d40;
+    font-size: 2rem;
+}
+
+section {
+    margin-top: 2rem;
+    border-top: 1px solid #ccc;
+    padding-top: 1rem;
+}
+
+button {
+    margin-left: 10px;
+    padding: 0.3rem 0.6rem;
+    background-color: #d19b63;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

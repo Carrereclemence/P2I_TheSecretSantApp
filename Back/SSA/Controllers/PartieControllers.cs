@@ -323,12 +323,20 @@ public class PartieControllers : ControllerBase
     // DELETE : Supprimer une partie (seulement le chef de la partie)
     [HttpDelete("{id:int}")]
     [Authorize]
-    [ServiceFilter(typeof(PartieChefAuthorizationAttribute))]
     public async Task<IActionResult> DeletePartie(int id)
     {
-        var partie = await _context.Parties.FindAsync(id);
+        var username = User.Identity.Name;
+        var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
+
+        var partie = await _context
+            .Parties.Include(p => p.Chef)
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (partie == null)
             return NotFound(new { message = "Partie non trouvée." });
+
+        // Seul le chef OU un admin peut supprimer
+        if (partie.Chef.UserName != username && !user.Admin)
+            return Forbid();
 
         _context.Parties.Remove(partie);
         await _context.SaveChangesAsync();
