@@ -8,14 +8,12 @@ public class AdminAuthorizationAttribute : Attribute, IAuthorizationFilter
     {
         var user = context.HttpContext.User;
 
-        // Check if the user or its identity is null, or if the user is not authenticated.
         if (user?.Identity == null || !user.Identity.IsAuthenticated)
         {
             context.Result = new UnauthorizedResult();
             return;
         }
 
-        // Check if the user is in the "Admin" role.
         if (!user.IsInRole("Admin"))
         {
             context.Result = new ForbidResult();

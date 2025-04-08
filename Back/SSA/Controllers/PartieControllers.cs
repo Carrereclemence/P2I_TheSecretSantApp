@@ -26,7 +26,6 @@ public class PartieControllers : ControllerBase
             .Include(p => p.Users)
             .ToListAsync();
 
-        // Projection manuelle vers un objet anonyme
         return Ok(
             parties.Select(p => new
             {
@@ -100,7 +99,6 @@ public class PartieControllers : ControllerBase
         if (user == null)
             return Unauthorized(new { message = "Utilisateur non trouvé." });
 
-        // Récupère toutes les parties où l'utilisateur figure dans la liste des participants
         var parties = await _context
             .Parties.Include(p => p.Users)
             .Include(p => p.Chef)
@@ -140,30 +138,25 @@ public class PartieControllers : ControllerBase
     [Authorize]
     public async Task<ActionResult> CreatePartie([FromBody] PartieModel model)
     {
-        // Récupération de l'ID user stocké dans le token (si vous stockez bien ClaimTypes.NameIdentifier)
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (!int.TryParse(userIdClaim, out int userId))
             return Unauthorized(new { message = "Utilisateur non identifié dans le JWT." });
 
-        // Récupère l'utilisateur en base
         var chef = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (chef == null)
             return Unauthorized(new { message = "Utilisateur non trouvé en base." });
 
-        // Crée la partie
         var newPartie = new Partie
         {
             Name = model.Name,
             Code = model.Code,
-            ChefId = chef.Id, // clé étrangère
-            Chef = chef, // navigation
+            ChefId = chef.Id,
+            Chef = chef,
         };
 
-        // Ajoute la nouvelle partie
         _context.Parties.Add(newPartie);
         await _context.SaveChangesAsync();
 
-        // Ajout de Chef dans la liste des participants
         newPartie.Users.Add(chef);
         await _context.SaveChangesAsync();
 
@@ -200,17 +193,14 @@ public class PartieControllers : ControllerBase
     [Authorize]
     public async Task<IActionResult> JoinPartieByCode([FromBody] JoinPartieModel model)
     {
-        // On récupère le nom d'utilisateur stocké dans ClaimTypes.Name
         var username = User.Identity.Name;
         var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
 
         if (user == null)
             return Unauthorized(new { message = "Utilisateur non trouvé." });
 
-        // Normalisation du code : suppression des espaces et conversion en minuscules
         var codeRecherche = model.Code?.Trim().ToLower();
 
-        // Recherche de la partie par son code, en utilisant une comparaison insensible à la casse
         var partie = await _context
             .Parties.Include(p => p.Users)
             .FirstOrDefaultAsync(p => p.Code.ToLower() == codeRecherche);
@@ -218,11 +208,9 @@ public class PartieControllers : ControllerBase
         if (partie == null)
             return NotFound(new { message = "Partie non trouvée." });
 
-        // Vérifie si l’utilisateur est déjà dans la liste
         if (partie.Users.Any(u => u.Id == user.Id))
             return BadRequest(new { message = "Vous êtes déjà dans cette partie." });
 
-        // Ajoute l'utilisateur dans la partie
         partie.Users.Add(user);
         await _context.SaveChangesAsync();
 
@@ -269,11 +257,9 @@ public class PartieControllers : ControllerBase
         if (participants.Count < 2)
             return BadRequest(new { message = "Pas assez de participants." });
 
-        // Supprimer les anciens tirages si existants
         var anciensTirages = _context.Tirages.Where(t => t.PartieId == id);
         _context.Tirages.RemoveRange(anciensTirages);
 
-        // Création des nouvelles paires
         var shuffled = participants.OrderBy(p => Guid.NewGuid()).ToList();
         var tirages = new List<Tirage>();
 

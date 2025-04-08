@@ -17,7 +17,6 @@ function PrincipaleCo() {
             .catch(error => console.error("Erreur :", error));
     }, []);
 
-    // 🔹 Fonction pour créer une partie
     const handleCreatePartie = async () => {
         if (!partieName.trim()) {
             setMessage("Veuillez entrer un nom de partie.");
@@ -26,18 +25,15 @@ function PrincipaleCo() {
 
         try {
             const payload = { name: partieName };
-            // ApiService crée la partie et renvoie l'objet créé (incluant l'ID)
             const response = await PartieApiService.createPartie(payload);
             setMessage(`🎉 Partie "${response.name}" créée avec succès !`);
             setPartieName("");
-            // Rediriger vers l'URL avec l'ID de la nouvelle partie
             navigate(`/partie/${response.id}`);
         } catch (error) {
             setMessage(error.message);
         }
     };
 
-   // 🔹 Fonction pour rejoindre une partie par code
     const handleJoinPartie = async () => {
         if (!partieCode.trim()) {
             setMessage("Veuillez entrer un code de partie valide.");
@@ -45,11 +41,9 @@ function PrincipaleCo() {
         }
 
         try {
-            // Appel de l'API pour rejoindre la partie en utilisant le code
             const partie = await PartieApiService.joinPartie(partieCode);
             setMessage(`✅ Vous avez rejoint la partie "${partie.name}" !`);
             setPartieCode("");
-            // Rediriger vers l'URL paramétrée avec l'ID de la partie
             navigate(`/partie/${partie.id}`);
         } catch (error) {
             setMessage(error.message);

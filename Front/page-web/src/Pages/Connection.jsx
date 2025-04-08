@@ -4,10 +4,10 @@ import "./../styles/Connection.css";
 import ApiService from "./../Services/ApiService";
 
 function Login() {
-    const [userName, setUserName] = useState(""); // UserName au lieu d'email
+    const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false); // Indicateur de chargement
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -18,7 +18,7 @@ function Login() {
         try {
                 const data = await ApiService.login(userName, password);
                 navigate("/");
-                window.location.reload(); // 🔥 Recharge la page pour actualiser le state
+                window.location.reload();
             } 
         catch (err) {
                 setError(err.message);
@@ -50,7 +50,6 @@ function Login() {
                 </form>
             </div>
 
-            {/* ✅ Section Inscription placée sous le bloc de connexion */}
             <div className="register-section">
                 <p className="signup-text">Pas encore de compte ?</p>
                 <button className="signup-button" onClick={() => navigate("/register")}>

@@ -25,19 +25,16 @@ function Register() {
         }
 
         try {
-            // 🔹 Création de l'objet utilisateur avec FirstName et LastName
             const newUser = {
                 userName,
                 firstName,
                 lastName,
                 password,
-                admin: false,   // Par défaut, l'utilisateur n'est pas admin
+                admin: false,
             };
 
-            // 🔹 Appel de l'API pour l'inscription
             await ApiService.register(newUser);
 
-            // 🔹 Redirection vers la connexion après inscription réussie
             navigate("/login");
         } catch (err) {
             setError(err.message || "Une erreur s'est produite.");
@@ -88,7 +85,6 @@ function Register() {
                 </form>
             </div>
 
-            {/* ✅ Bouton retour connexion */}
             <div className="login-section">
                 <p className="login-text">Déjà un compte ?</p>
                 <button className="login-button" onClick={() => navigate("/login")}>

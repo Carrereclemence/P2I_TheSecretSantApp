@@ -2,10 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
 {
-    // Déclare la table des utilisateurs
     public DbSet<Users> Users { get; set; } = null!;
-
-    // Déclare la table des parties
     public DbSet<Partie> Parties { get; set; } = null!;
     public DbSet<Tirage> Tirages { get; set; } = null!;
 

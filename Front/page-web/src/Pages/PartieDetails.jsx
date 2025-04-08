@@ -22,7 +22,6 @@ function PartieDetails() {
         const partieData = await PartieApiService.getPartieById(id);
         setPartie(partieData);
 
-        // Essaye de récupérer le destinataire
         try {
           const dest = await PartieApiService.getMonDestinataire(id);
           setDestinataire(dest);
@@ -58,7 +57,7 @@ function PartieDetails() {
       if (!response.ok) throw new Error(result.message || "Erreur pendant le tirage");
 
       alert("🎉 Tirage effectué avec succès !");
-      window.location.reload(); // Recharge pour mettre à jour le destinataire
+      window.location.reload();
     } catch (err) {
       alert("❌ Erreur : " + err.message);
     }
@@ -72,7 +71,6 @@ function PartieDetails() {
       <p><strong>Code :</strong> {partie.code}</p>
 
       <div className="blocks-wrapper">
-        {/* 🔹 Bloc Chef */}
         <div className="info-block">
           <h3>👑 Chef de la partie</h3>
           {partie.chef ? (
@@ -82,7 +80,6 @@ function PartieDetails() {
           )}
         </div>
 
-        {/* 🔹 Bloc Participants */}
         <div className="info-block">
           <h3>👥 Participants</h3>
           <ul>
@@ -98,7 +95,6 @@ function PartieDetails() {
           </ul>
         </div>
 
-        {/* 🔹 Bloc Destinataire */}
         {destinataire && (
           <div className="info-block">
             <h3>🎁 Ton destinataire</h3>
@@ -106,7 +102,6 @@ function PartieDetails() {
           </div>
         )}
 
-        {/* 🔹 Bloc Admin */}
         {isChef && (
           <div className="info-block admin-actions">
             <h3>⚙️ Actions admin</h3>
@@ -131,7 +126,6 @@ function PartieDetails() {
         )}
       </div>
 
-      {/* 🔹 Bouton Retour */}
       <button onClick={() => navigate("/")}>⬅️ Retour</button>
     </div>
   );

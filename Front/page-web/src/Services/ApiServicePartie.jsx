@@ -18,7 +18,6 @@ class PartieApiService {
 
   // 🔹 Créer une partie
   async createPartie(payload) {
-    // Si le payload ne contient pas de code, on le génère automatiquement
     if (!payload.code) {
       payload.code = Math.random().toString(36).slice(2, 7).toUpperCase();
     }

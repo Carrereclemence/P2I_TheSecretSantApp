@@ -86,7 +86,6 @@ public class UsersControllers : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult> Register([FromBody] RegisterModel model)
     {
-        // Vérifie si le nom d'utilisateur existe déjà
         if (_context.Users.Any(u => u.UserName == model.UserName))
             return BadRequest(new { message = "Nom d'utilisateur déjà pris." });
 
@@ -110,7 +109,6 @@ public class UsersControllers : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        // Recherche l'utilisateur
         var user = await _context.Users.SingleOrDefaultAsync(u =>
             u.UserName == model.UserName && u.Password == model.Password
         );
@@ -120,7 +118,6 @@ public class UsersControllers : ControllerBase
             return Unauthorized(new { message = "Nom d'utilisateur ou mot de passe incorrect." });
         }
 
-        // Génère le token JWT
         var tokenString = GenerateJWTToken(user);
         return Ok(new { Token = tokenString, Message = "Connexion réussie !" });
     }
@@ -138,7 +135,6 @@ public class UsersControllers : ControllerBase
         user.LastName = model.LastName ?? user.LastName;
         user.Password = string.IsNullOrWhiteSpace(model.Password) ? user.Password : model.Password;
 
-        // Ne met à jour Admin que s'il est fourni
         if (model.Admin.HasValue)
             user.Admin = model.Admin.Value;
 
@@ -170,11 +166,8 @@ public class UsersControllers : ControllerBase
 
         var claims = new[]
         {
-            // Enregistre l'Id de l'utilisateur dans NameIdentifier
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            // Enregistre le UserName dans Name
             new Claim(ClaimTypes.Name, user.UserName),
-            // Rôle : Admin ou User
             new Claim(ClaimTypes.Role, user.Admin ? "Admin" : "User"),
         };
 
