@@ -1,12 +1,12 @@
 const partieEndpoint = "http://localhost:5286/ApiParties/Parties";
 
 class PartieApiService {
-  // 🔹 Récupérer toutes les parties
+  // Récupérer toutes les parties
   async getAllParties() {
     return this.fetchFromApi(`${partieEndpoint}`, "GET");
   }
 
-  // 🔹 Récupérer une partie par son ID
+  // Récupérer une partie par son ID
   async getPartieById(id) {
     return this.fetchFromApi(`${partieEndpoint}/${id}`, "GET");
   }
@@ -16,7 +16,7 @@ class PartieApiService {
     return this.fetchFromApi(`${partieEndpoint}/my-parties`, "GET");
   }
 
-  // 🔹 Créer une partie
+  // Créer une partie
   async createPartie(payload) {
     if (!payload.code) {
       payload.code = Math.random().toString(36).slice(2, 7).toUpperCase();
@@ -24,23 +24,23 @@ class PartieApiService {
     return this.fetchFromApi(`${partieEndpoint}/create`, "POST", payload);
   }
 
-  // 🔹 Rejoindre une partie
+  // Rejoindre une partie
   async joinPartie(code) {
     return this.fetchFromApi(`${partieEndpoint}/join`, "POST", { code });
   }
 
-  // 🔹 Supprimer une partie
+  // Supprimer une partie
   async deletePartie(id) {
     return this.fetchFromApi(`${partieEndpoint}/${id}`, "DELETE");
   }
 
-  // 🔹 Récupérer le destinataire du tirage pour l'utilisateur connecté
+  // Récupérer le destinataire du tirage pour l'utilisateur connecté
   async getMonDestinataire(partieId) {
     return this.fetchFromApi(`${partieEndpoint}/${partieId}/mon-destinataire`, "GET");
   }
 
 
-  // 🔹 Fonction générique pour appeler l'API
+  // Fonction générique pour appeler l'API
   async fetchFromApi(url, method = "GET", body = null) {
     console.log(`📡 Fetching API: ${method} ${url}`);
     try {

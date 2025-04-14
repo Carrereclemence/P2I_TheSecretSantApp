@@ -1,4 +1,4 @@
-/* ✅ Conteneur principal CENTRÉ */
+/* ✅ Conteneur principal */
 .register-container {
     display: flex;
     flex-direction: column;
@@ -106,21 +106,21 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* 🔹 ADAPTATION POUR TABLETTES */
+/* 🔹 Tablettes */
 @media (max-width: 1024px) {
     .register {
         width: 50vw;
     }
 }
 
-/* 🔹 ADAPTATION POUR TÉLÉPHONES */
+/* 🔹 Téléphones */
 @media (max-width: 768px) {
     .register {
         width: 60vw;
     }
 }
 
-/* 🔹 ADAPTATION POUR PETITS ÉCRANS */
+/* 🔹 Petits écrans */
 @media (max-width: 480px) {
     .register {
         width: 80vw;

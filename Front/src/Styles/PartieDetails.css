@@ -1,4 +1,4 @@
-/* ✅ CONTAINER PRINCIPAL CENTRÉ */
+/* ✅ Container principal */
 .partie-details {
     width: 100vw;
     margin: 0 auto;
@@ -8,7 +8,7 @@
     align-items: center;
 }
 
-/* ✅ TITRE ET CODE */
+/* ✅ Titre et code */
 .partie-details h1 {
     font-size: 2.5rem;
     color: #c62828;
@@ -21,16 +21,15 @@
     color: #444;
 }
 
-/* ✅ WRAPPER POUR CENTRER LES BLOCS */
+/* ✅ Wrapper pour les blocs */
 .blocks-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* ✅ centre les .info-block horizontalement */
     gap: 3vh;
 }
 
-/* ✅ BLOCS INDIVIDUELS */
+/* ✅ Blocs indiv */
 .info-block {
     width: 30%;
     background-color: #f0f0f0;
@@ -41,14 +40,14 @@
     text-align: left;
 }
 
-/* ✅ TITRE DE BLOC */
+/* ✅ Titre de blocs */
 .info-block h3 {
     margin-bottom: 1vh;
     color: #333;
     font-size: 1.2rem;
 }
 
-/* ✅ LISTE DES PARTICIPANTS SANS PUCE */
+/* ✅ Liste des participants */
 .info-block ul {
     list-style: none;
     padding-left: 0;
@@ -61,7 +60,7 @@
     margin: 0.4vh 0;
 }
 
-/* ✅ BOUTONS */
+/* ✅ Boutons */
 button {
     background-color: #c62828;
     color: white;
@@ -79,7 +78,7 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* ✅ BOUTON SUPPRESSION */
+/* ✅ Bouton suppression */
 .btn-supprimer {
     background-color: red;
 }
@@ -88,19 +87,19 @@ button:hover {
     background-color: darkred;
 }
 
-/* ✅ ACTIONS ADMIN */
+/* ✅ Actions admin */
 .admin-actions button {
     display: block;
     width: 100%;
     margin-top: 1vh;
 }
 
-/* ✅ RETOUR */
+/* ✅ Retour */
 .partie-details>button:last-of-type {
     margin-top: 4vh;
 }
 
-/* 🔹 RESPONSIVE DOUX */
+/* 🔹 Responsive */
 @media (max-width: 768px) {
     .partie-details h1 {
         font-size: 2rem;

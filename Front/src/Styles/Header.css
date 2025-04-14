@@ -1,4 +1,4 @@
-/* ✅ HEADER PRINCIPAL */
+/* ✅ Principal */
 .header {
     position: fixed;
     top: 0;
@@ -13,7 +13,7 @@
     z-index: 1000;
 }
 
-/* ✅ LOGO */
+/* ✅ Logo */
 .logo-container {
     display: flex;
     align-items: center;
@@ -41,14 +41,14 @@
     transform: scale(1.1);
 }
 
-/* ✅ TITRE DU SITE */
+/* ✅ Titre */
 .header h1 {
     margin: 0;
     font-size: 1.5rem;
     white-space: nowrap;
 }
 
-/* ✅ ICÔNE DE CONNEXION */
+/* ✅ Icône de connexion */
 .login-icon {
     cursor: pointer;
     /*margin-left: auto;*/
@@ -70,7 +70,7 @@
     transform: scale(1.1);
 }
 
-/* 🔹 ADAPTATION POUR TABLETTES (max 1024px) */
+/* 🔹 Tablettes (max 1024px) */
 @media (max-width: 1024px) {
     .header {
         align-items: center;
@@ -98,7 +98,7 @@
     }
 }
 
-/* 🔹 ADAPTATION POUR TÉLÉPHONES (max 768px) */
+/* 🔹 Téléphones (max 768px) */
 @media (max-width: 768px) {
     .header {
         align-items: center;
@@ -126,7 +126,7 @@
     }
 }
 
-/* 🔹 ADAPTATION POUR PETITS ÉCRANS (max 480px) */
+/* 🔹 Petits écrans (max 480px) */
 @media (max-width: 480px) {
     .header {
         align-items: center;

@@ -1,4 +1,4 @@
-/* ✅ CONTAINER PRINCIPAL */
+/* ✅ Container principal */
 .groupes-container {
     display: flex;
     width: 100vw;
@@ -9,7 +9,7 @@
     background-color: #fff;
 }
 
-/* ✅ TITRE DE LA PAGE */
+/* ✅ Titre */
 .groupes-container h1 {
     font-size: 2.5rem;
     color: #c62828;
@@ -17,7 +17,7 @@
     text-align: center;
 }
 
-/* ✅ WRAPPER FLEX DES BLOCS */
+/* ✅ Wrapper flex */
 .groupes-flex {
         display: flex;
         flex-wrap: wrap;
@@ -28,7 +28,7 @@
         box-sizing: border-box;
     }
 
-/* ✅ CARTE DE CHAQUE PARTIE */
+/* ✅ Bloc de chaque partie */
 .groupe-card {
     width: 28%;
     min-width: 280px;
@@ -45,21 +45,21 @@
     transform: scale(1.02);
 }
 
-/* ✅ TITRE DU GROUPE */
+/* ✅ Titre du groupe */
 .groupe-card h2 {
     font-size: 1.5rem;
     margin-bottom: 1vh;
     color: #333;
 }
 
-/* ✅ INFOS DU GROUPE */
+/* ✅ Infos du groupe */
 .groupe-card p {
     margin: 0.5vh 0;
     font-size: 1rem;
     color: #444;
 }
 
-/* ✅ LISTE DES PARTICIPANTS */
+/* ✅ Liste des particpants */
 .groupe-card ul {
     list-style: none;
     padding-left: 0;
@@ -71,7 +71,7 @@
     padding: 0.3vh 0;
 }
 
-/* ✅ BOUTON DÉTAILS */
+/* ✅ Boutons détails */
 .groupe-card button {
     margin-top: 2vh;
     padding: 1.2vh 2.5vw;
@@ -90,7 +90,7 @@
     transform: scale(1.05);
 }
 
-/* 🔹 RESPONSIVE */
+/* 🔹 Tablettes */
 @media (max-width: 900px) {
     .groupe-card {
         flex: 1 1 calc(50% - 2vw);
@@ -98,6 +98,7 @@
     }
 }
 
+/* 🔹 Téléphones */
 @media (max-width: 768px) {
     .groupes-container h1 {
         font-size: 2rem;
@@ -117,6 +118,7 @@
     }
 }
 
+/* 🔹 Petits écrans */
 @media (max-width: 600px) {
     .groupe-card {
         flex: 1 1 100%;

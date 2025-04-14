@@ -12,12 +12,12 @@ export class User {
 }
 
 class ApiService {
-  // 🔹 Récupérer les infos de l'utilisateur connecté
+  // Récupérer les infos de l'utilisateur connecté
   async getCurrentUser() {
     return this.fetchFromApi(`${rootEndpoint}/me`, "GET");
   }
 
-  // 🔹 Connexion de l'utilisateur
+  // Connexion de l'utilisateur
   async login(userName, password) {
     const data = await this.fetchFromApi(`${rootEndpoint}/login`, "POST", {
       userName,
@@ -31,37 +31,37 @@ class ApiService {
     return data;
   }
 
-  // 🔹 Déconnexion de l'utilisateur
+  // Déconnexion de l'utilisateur
   logout() {
     localStorage.removeItem("token");
   }
 
-  // 🔹 Inscription d'un nouvel utilisateur
+  // Inscription d'un nouvel utilisateur
   async register(user) {
     return this.fetchFromApi(`${rootEndpoint}/register`, "POST", user);
   }
 
-  // 🔹 Récupérer tous les utilisateurs (Admin uniquement)
+  // Récupérer tous les utilisateurs (Admin uniquement)
   async getAllUsers() {
     return this.fetchFromApi(`${rootEndpoint}`, "GET");
   }
 
-  // 🔹 Récupérer un utilisateur par son ID (Admin uniquement)
+  // Récupérer un utilisateur par son ID (Admin uniquement)
   async getUserById(id) {
     return this.fetchFromApi(`${rootEndpoint}/${id}`, "GET");
   }
 
-  // 🔹 Mettre à jour un utilisateur
+  // Mettre à jour un utilisateur
   async updateUser(id, user) {
     return this.fetchFromApi(`${rootEndpoint}/${id}`, "PUT", user);
   }
 
-  // 🔹 Supprimer un utilisateur (Admin uniquement)
+  // Supprimer un utilisateur (Admin uniquement)
   async deleteUser(id) {
     return this.fetchFromApi(`${rootEndpoint}/${id}`, "DELETE");
   }
 
-  // 🔹 Fonction générique pour faire des requêtes à l'API
+  // Fonction générique pour faire des requêtes à l'API
   async fetchFromApi(url, method = "GET", body = null) {
     console.log(`📡 Fetching API: ${method} ${url}`);
     try {
@@ -76,7 +76,7 @@ class ApiService {
         body: body ? JSON.stringify(body) : null,
       });
 
-      // 🔍 Vérifie si la réponse est vide ou non
+      // Vérifie si la réponse est vide ou non
       const contentType = response.headers.get("content-type");
       let content;
       if (contentType && contentType.includes("application/json")) {

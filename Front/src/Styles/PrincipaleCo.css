@@ -1,3 +1,4 @@
+/* ✅ Container principal */
 .page-co-container {
     display: flex;
     flex-direction: column;
@@ -9,13 +10,13 @@
     padding-top: 10vh;
 }
 
-/* wrapper centré avec largeur max */
 .page-co-content {
     width: 100% !important;
     max-width: 600px;
     padding: 0 2vw;
 }
 
+/* ✅ Titre */
 .page-title {
     font-size: 4vw;
     text-align: center;
@@ -23,6 +24,7 @@
     margin-bottom: 4vh;
 }
 
+/* ✅ Infos utilisateur */
 .user-info {
     text-align: center;
     margin-bottom: 4vh;
@@ -45,21 +47,19 @@
     transform: scale(1.05);
 }
 
-/* ✅ WRAPPER FLEX POUR DISPOSER CÔTE À CÔTE */
+/* ✅ Wrapper flex */
 .gestion-wrapper {
     display: flex;
     justify-content: center;
     align-items: stretch;
     gap: 2vw;
     flex-wrap: wrap;
-    /* Permet le passage en colonne si trop étroit */
     margin-bottom: 4vh;
 }
 
-/* ✅ BLOCS INDIVIDUELS */
+/* ✅ Blocs indiv */
 .gestion-partie {
     flex: 1 1 300px;
-    /* min 300px, prend la place dispo */
     max-width: 500px;
     background-color: #f0f0f0;
     padding: 2vh 2vw;
@@ -94,6 +94,7 @@
     transform: scale(1.05);
 }
 
+/* ✅ Message */
 .message {
     color: green;
     text-align: center;
