@@ -11,7 +11,7 @@ public static class SeedData
         {
             context.Database.EnsureCreated();
 
-            // ✅ S'il y a déjà des utilisateurs, on seed pas
+            // S'il y a déjà des utilisateurs, on n'en crée pas de nouveaux
             if (context.Users.Any())
                 return;
 
@@ -21,7 +21,7 @@ public static class SeedData
                 UserName = "admin",
                 FirstName = "Admin",
                 LastName = "Admin",
-                Password = "admin", // non hashé volontairement
+                Password = "admin",
                 Admin = true,
             };
 

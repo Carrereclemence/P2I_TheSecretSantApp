@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+// Contrôleur d'API pour la gestion des groupes "Parties"
 [ApiController]
 [Route("ApiParties/Parties")]
 public class PartieControllers : ControllerBase
@@ -10,22 +11,24 @@ public class PartieControllers : ControllerBase
     private readonly AppDbContext _context;
     private readonly IConfiguration _configuration;
 
+    // Injection du contexte BDD et de la configuration
     public PartieControllers(AppDbContext context, IConfiguration configuration)
     {
         _context = context;
         _configuration = configuration;
     }
 
-    // GET : Récupérer toutes les parties (Admin uniquement)
+    // Récupère toutes les parties (accessible uniquement par les admins)
     [HttpGet]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<Partie>>> GetParties()
     {
         var parties = await _context
-            .Parties.Include(p => p.Chef)
-            .Include(p => p.Users)
+            .Parties.Include(p => p.Chef) // Inclut les infos du chef
+            .Include(p => p.Users) // Inclut les utilisateurs
             .ToListAsync();
 
+        // Projection : la structure renvoyée
         return Ok(
             parties.Select(p => new
             {
@@ -52,7 +55,7 @@ public class PartieControllers : ControllerBase
         );
     }
 
-    // GET : Récupérer une partie par son ID
+    // Récupère une partie spécifique par son ID
     [HttpGet("{id:int}")]
     [Authorize]
     public async Task<ActionResult<Partie>> GetPartieById(int id)
@@ -89,7 +92,7 @@ public class PartieControllers : ControllerBase
         );
     }
 
-    // GET : Récupérer toutes les parties d'un utilisateur connecté
+    // Récupère toutes les parties auxquelles l'utilisateur connecté participe
     [HttpGet("my-parties")]
     [Authorize]
     public async Task<IActionResult> GetMyParties()
@@ -108,36 +111,38 @@ public class PartieControllers : ControllerBase
         if (parties == null || parties.Count == 0)
             return NotFound(new { message = "Vous n'êtes dans aucune partie." });
 
-        var result = parties.Select(p => new
-        {
-            p.Id,
-            p.Code,
-            p.Name,
-            Chef = p.Chef == null
-                ? null
-                : new
-                {
-                    p.Chef.Id,
-                    p.Chef.UserName,
-                    p.Chef.FirstName,
-                    p.Chef.LastName,
-                },
-            Users = p.Users.Select(u => new
+        return Ok(
+            parties.Select(p => new
             {
-                u.Id,
-                u.UserName,
-                u.FirstName,
-                u.LastName,
-            }),
-        });
-        return Ok(result);
+                p.Id,
+                p.Code,
+                p.Name,
+                Chef = p.Chef == null
+                    ? null
+                    : new
+                    {
+                        p.Chef.Id,
+                        p.Chef.UserName,
+                        p.Chef.FirstName,
+                        p.Chef.LastName,
+                    },
+                Users = p.Users.Select(u => new
+                {
+                    u.Id,
+                    u.UserName,
+                    u.FirstName,
+                    u.LastName,
+                }),
+            })
+        );
     }
 
-    // POST : Créer une nouvelle partie (authentifié)
+    // Crée une nouvelle partie avec l'utilisateur connecté comme chef
     [HttpPost("create")]
     [Authorize]
     public async Task<ActionResult> CreatePartie([FromBody] PartieModel model)
     {
+        // Récupération de l'ID de l'utilisateur à partir du token JWT
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (!int.TryParse(userIdClaim, out int userId))
             return Unauthorized(new { message = "Utilisateur non identifié dans le JWT." });
@@ -146,6 +151,7 @@ public class PartieControllers : ControllerBase
         if (chef == null)
             return Unauthorized(new { message = "Utilisateur non trouvé en base." });
 
+        // Création de la partie
         var newPartie = new Partie
         {
             Name = model.Name,
@@ -157,6 +163,7 @@ public class PartieControllers : ControllerBase
         _context.Parties.Add(newPartie);
         await _context.SaveChangesAsync();
 
+        // Le chef est automatiquement ajouté à sa propre partie
         newPartie.Users.Add(chef);
         await _context.SaveChangesAsync();
 
@@ -168,15 +175,13 @@ public class PartieControllers : ControllerBase
                 newPartie.Id,
                 newPartie.Code,
                 newPartie.Name,
-                Chef = newPartie.Chef == null
-                    ? null
-                    : new
-                    {
-                        newPartie.Chef.Id,
-                        newPartie.Chef.UserName,
-                        newPartie.Chef.FirstName,
-                        newPartie.Chef.LastName,
-                    },
+                Chef = new
+                {
+                    newPartie.Chef.Id,
+                    newPartie.Chef.UserName,
+                    newPartie.Chef.FirstName,
+                    newPartie.Chef.LastName,
+                },
                 Users = newPartie.Users.Select(u => new
                 {
                     u.Id,
@@ -188,7 +193,7 @@ public class PartieControllers : ControllerBase
         );
     }
 
-    // POST : Rejoindre une partie par code (authentifié)
+    // Permet à un utilisateur de rejoindre une partie en entrant son code
     [HttpPost("join")]
     [Authorize]
     public async Task<IActionResult> JoinPartieByCode([FromBody] JoinPartieModel model)
@@ -200,7 +205,6 @@ public class PartieControllers : ControllerBase
             return Unauthorized(new { message = "Utilisateur non trouvé." });
 
         var codeRecherche = model.Code?.Trim().ToLower();
-
         var partie = await _context
             .Parties.Include(p => p.Users)
             .FirstOrDefaultAsync(p => p.Code.ToLower() == codeRecherche);
@@ -211,6 +215,7 @@ public class PartieControllers : ControllerBase
         if (partie.Users.Any(u => u.Id == user.Id))
             return BadRequest(new { message = "Vous êtes déjà dans cette partie." });
 
+        // Ajout du participant
         partie.Users.Add(user);
         await _context.SaveChangesAsync();
 
@@ -240,7 +245,7 @@ public class PartieControllers : ControllerBase
         );
     }
 
-    // POST : Tirage au sort (seulement le chef de la partie)
+    // Lance le tirage au sort entre les participants (seul le chef peut le faire)
     [HttpPost("{id:int}/tirage")]
     [Authorize]
     [ServiceFilter(typeof(PartieChefAuthorizationAttribute))]
@@ -257,9 +262,11 @@ public class PartieControllers : ControllerBase
         if (participants.Count < 2)
             return BadRequest(new { message = "Pas assez de participants." });
 
+        // Supprime les anciens tirages
         var anciensTirages = _context.Tirages.Where(t => t.PartieId == id);
         _context.Tirages.RemoveRange(anciensTirages);
 
+        // Mélange aléatoire des participants
         var shuffled = participants.OrderBy(p => Guid.NewGuid()).ToList();
         var tirages = new List<Tirage>();
 
@@ -290,7 +297,7 @@ public class PartieControllers : ControllerBase
         );
     }
 
-    // GET : Destinataire du mon cadeau
+    // Récupère le destinataire d’un utilisateur dans une partie donnée
     [HttpGet("{id:int}/mon-destinataire")]
     [Authorize]
     public async Task<IActionResult> GetDestinataire(int id)
@@ -320,23 +327,15 @@ public class PartieControllers : ControllerBase
         );
     }
 
-    // DELETE : Supprimer une partie (seulement le chef de la partie)
+    // Supprime une partie (autorisé uniquement pour le chef de la partieou l'admin du site)
     [HttpDelete("{id:int}")]
     [Authorize]
+    [ServiceFilter(typeof(PartieChefAuthorizationAttribute))]
     public async Task<IActionResult> DeletePartie(int id)
     {
-        var username = User.Identity.Name;
-        var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
-
-        var partie = await _context
-            .Parties.Include(p => p.Chef)
-            .FirstOrDefaultAsync(p => p.Id == id);
+        var partie = await _context.Parties.FindAsync(id);
         if (partie == null)
             return NotFound(new { message = "Partie non trouvée." });
-
-        // Seul le chef OU un admin peut supprimer
-        if (partie.Chef.UserName != username && !user.Admin)
-            return Forbid();
 
         _context.Parties.Remove(partie);
         await _context.SaveChangesAsync();
@@ -344,13 +343,14 @@ public class PartieControllers : ControllerBase
     }
 }
 
-// Modèle pour POST create
+// Modèle pour créer une partie
 public class PartieModel
 {
     public string Code { get; set; }
     public string Name { get; set; }
 }
 
+// Modèle pour rejoindre une partie avec un code
 public class JoinPartieModel
 {
     public string Code { get; set; }
