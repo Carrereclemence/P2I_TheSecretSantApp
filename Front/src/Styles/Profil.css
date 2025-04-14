@@ -1,4 +1,4 @@
-/* ✅ Container principal */
+/* Container principal */
 .profil-container {
     display: flex;
     flex-direction: column;
@@ -8,7 +8,7 @@
     width: 100vw;
 }
 
-/* ✅ Encadré profil */
+/* Encadré profil */
 .profil-box {
     width: 40vw;
     max-width: 400px;
@@ -22,7 +22,7 @@
     align-items: center;
 }
 
-/* ✅ Titre */
+/* Titre */
 .profil-box h1 {
     font-size: 2rem;
     color: #c62828;
@@ -30,21 +30,21 @@
     margin-bottom: 3vh;
 }
 
-/* ✅ Message d'info */
+/* Message d'info */
 .message {
     font-size: 1rem;
     color: green;
     margin-bottom: 2vh;
 }
 
-/* ✅ Message d'erreur */
+/* Message d'erreur */
 .error {
     color: red;
     font-size: 1rem;
     margin-bottom: 2vh;
 }
 
-/* ✅ Formulaire */
+/* Formulaire */
 .profil-box form {
     display: flex;
     flex-direction: column;
@@ -53,7 +53,7 @@
     width: 100%;
 }
 
-/* ✅ Labels */
+/* Labels */
 .profil-box label {
     font-weight: bold;
     color: #333;
@@ -61,7 +61,7 @@
     margin-left: 2.5%;
 }
 
-/* ✅ Champs de saisie */
+/* Champs de saisie */
 .profil-box input {
     width: 95%;
     padding: 1.5vh;
@@ -70,7 +70,7 @@
     border-radius: 1vh;
 }
 
-/* ✅ Bouton enregistrer */
+/* Bouton enregistrer */
 .profil-box button {
     background-color: #c62828 !important;
     color: white !important;
@@ -88,7 +88,7 @@
     transform: scale(1.05);
 }
 
-/* 🔹 Tablettes */
+/* Tablettes */
 @media (max-width: 1024px) {
     .profil-box {
         width: 45vw;
@@ -109,7 +109,7 @@
     }
 }
 
-/* 🔹 Téléphones */
+/* Téléphones */
 @media (max-width: 768px) {
     .profil-box {
         width: 80vw;

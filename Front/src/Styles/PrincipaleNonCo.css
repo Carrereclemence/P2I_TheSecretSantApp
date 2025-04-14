@@ -1,4 +1,4 @@
-/* ✅ Titre principal */
+/* Titre principal */
 .page-title {
     position: relative;
     top: 5vh;
@@ -10,7 +10,7 @@
     color: #c62828;
 }
 
-/* ✅ Section explication */
+/* Section explication */
 .explication {
     background-color: #f0f0f0;
     font-size: 15px;
@@ -22,13 +22,13 @@
     box-shadow: 0.2vw 0.2vw 1vw rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ Boutons de connexion */
+/* Boutons de connexion */
 .connexion-container {
     text-align: center;
     margin-top: 5vh;
 }
 
-/* ✅ Blocs de connexion */
+/* Blocs de connexion */
 .connexion {
     display: flex;
     align-items: center;
@@ -41,7 +41,7 @@
     font-size: 15px;
 }
 
-/* ✅ Style des boutons */
+/* Style des boutons */
 .connexion button {
     background-color: #c62828;
     color: white;
@@ -58,7 +58,7 @@
     transform: scale(1.05);
 }
 
-/* 🔹 Tablettes (max 1024px) */
+/* Tablettes (max 1024px) */
 @media (max-width: 1024px) {
     .page-title {
         font-size: 3.5vw;
@@ -79,7 +79,7 @@
     }
 }
 
-/* 🔹 Téléphones (max 768px) */
+/* Téléphones (max 768px) */
 @media (max-width: 768px) {
     .page-title {
         font-size: 4vw;
@@ -102,7 +102,7 @@
     }
 }
 
-/* 🔹 Petis écrans (max 480px) */
+/* Petis écrans (max 480px) */
 @media (max-width: 480px) {
     .page-title {
         font-size: 5vw;

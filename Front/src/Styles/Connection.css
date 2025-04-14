@@ -1,4 +1,4 @@
-/* ✅ Principal de la page */
+/* Principal de la page */
 .login-container {
     display: flex;
     flex-direction: column;
@@ -8,7 +8,7 @@
     width: 100vw;
 }
 
-/* ✅ Encadré de connexion */
+/* Encadré de connexion */
 .login {
     width: 40vw;
     max-width: 400px;
@@ -23,7 +23,7 @@
     align-items: center;
 }
 
-/* ✅ Titre */
+/* Titre */
 .login h2 {
     font-size: 2rem;
     color: #c62828;
@@ -31,14 +31,14 @@
     margin-bottom: 3vh;
 }
 
-/* ✅ Message d'erreur */
+/* Message d'erreur */
 .error {
     color: red;
     font-size: 1rem;
     margin-bottom: 2vh;
 }
 
-/* ✅ Formulaire */
+/* Formulaire */
 form {
     display: flex;
     flex-direction: column;
@@ -46,7 +46,7 @@ form {
     gap: 2vh;
 }
 
-/* ✅ Champs de saisie */
+/* Champs de saisie */
 input {
     width: 95%;
     padding: 1.5vh;
@@ -55,7 +55,7 @@ input {
     border-radius: 1vh;
 }
 
-/* ✅ Bouton de connexion */
+/* Bouton de connexion */
 button {
     background-color: #c62828 !important;
     color: white !important;
@@ -71,7 +71,7 @@ button:hover:not(:disabled) {
     transform: scale(1.05);
 }
 
-/* ✅ Section Inscription */
+/* Section Inscription */
 .register-section {
     width: 40vw;
     max-width: 400px;
@@ -79,14 +79,14 @@ button:hover:not(:disabled) {
     margin-top: 2vh;
 }
 
-/* ✅ Texte "Pas encore de compte ?" */
+/* Texte "Pas encore de compte ?" */
 .signup-text {
     font-size: 1rem;
     color: #333;
     margin-bottom: 1vh;
 }
 
-/* ✅ Bouton "S'inscrire" */
+/* Bouton "S'inscrire" */
 .signup-button {
     background-color: white;
     color: #c62828;
@@ -99,14 +99,14 @@ button:hover:not(:disabled) {
     width: 80%;
 }
 
-/* ✅ Effet au survol */
+/* Effet au survol */
 .signup-button:hover {
     background-color: #c62828;
     color: white;
     transform: scale(1.05);
 }
 
-/* 🔹 Tablette (max 1024px) */
+/* Tablette (max 1024px) */
 @media (max-width: 1024px) {
     .login, .register-section {
         width: 40vw;
@@ -127,7 +127,7 @@ button:hover:not(:disabled) {
     }
 }
 
-/* 🔹 Téléphone (max 768px) */
+/* Téléphone (max 768px) */
 @media (max-width: 768px) {
     .login, .register-section {
         width: 35vw;
@@ -149,7 +149,7 @@ button:hover:not(:disabled) {
     }
 }
 
-/* 🔹 Petits écrans (max 480px) */
+/* Petits écrans (max 480px) */
 @media (max-width: 480px) {
     .login, .register-section {
         width: 35vw;

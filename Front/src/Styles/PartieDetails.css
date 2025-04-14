@@ -1,4 +1,4 @@
-/* ✅ Container principal */
+/* Container principal */
 .partie-details {
     width: 100vw;
     margin: 0 auto;
@@ -8,7 +8,7 @@
     align-items: center;
 }
 
-/* ✅ Titre et code */
+/* Titre et code */
 .partie-details h1 {
     font-size: 2.5rem;
     color: #c62828;
@@ -21,7 +21,7 @@
     color: #444;
 }
 
-/* ✅ Wrapper pour les blocs */
+/* Wrapper pour les blocs */
 .blocks-wrapper {
     display: flex;
     flex-direction: column;
@@ -29,7 +29,7 @@
     gap: 3vh;
 }
 
-/* ✅ Blocs indiv */
+/* Blocs indiv */
 .info-block {
     width: 30%;
     background-color: #f0f0f0;
@@ -40,14 +40,14 @@
     text-align: left;
 }
 
-/* ✅ Titre de blocs */
+/* Titre de blocs */
 .info-block h3 {
     margin-bottom: 1vh;
     color: #333;
     font-size: 1.2rem;
 }
 
-/* ✅ Liste des participants */
+/* Liste des participants */
 .info-block ul {
     list-style: none;
     padding-left: 0;
@@ -60,7 +60,7 @@
     margin: 0.4vh 0;
 }
 
-/* ✅ Boutons */
+/* Boutons */
 button {
     background-color: #c62828;
     color: white;
@@ -78,7 +78,7 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* ✅ Bouton suppression */
+/* Bouton suppression */
 .btn-supprimer {
     background-color: red;
 }
@@ -87,19 +87,19 @@ button:hover {
     background-color: darkred;
 }
 
-/* ✅ Actions admin */
+/* Actions admin */
 .admin-actions button {
     display: block;
     width: 100%;
     margin-top: 1vh;
 }
 
-/* ✅ Retour */
+/* Retour */
 .partie-details>button:last-of-type {
     margin-top: 4vh;
 }
 
-/* 🔹 Responsive */
+/* Responsive */
 @media (max-width: 768px) {
     .partie-details h1 {
         font-size: 2rem;

@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 
-// Attribut personnalisé utilisé pour restreindre l'accès à certaines actions
-// uniquement au chef (créateur) d'une partie
 [AttributeUsage(AttributeTargets.Method)]
 public class PartieChefAuthorizationAttribute : Attribute, IAuthorizationFilter
 {

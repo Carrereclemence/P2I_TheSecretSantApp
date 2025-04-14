@@ -1,4 +1,4 @@
-/* ✅ Container principal */
+/* Container principal */
 .page-co-container {
     display: flex;
     flex-direction: column;
@@ -16,7 +16,7 @@
     padding: 0 2vw;
 }
 
-/* ✅ Titre */
+/* Titre */
 .page-title {
     font-size: 4vw;
     text-align: center;
@@ -24,7 +24,7 @@
     margin-bottom: 4vh;
 }
 
-/* ✅ Infos utilisateur */
+/* Infos utilisateur */
 .user-info {
     text-align: center;
     margin-bottom: 4vh;
@@ -47,7 +47,7 @@
     transform: scale(1.05);
 }
 
-/* ✅ Wrapper flex */
+/* Wrapper flex */
 .gestion-wrapper {
     display: flex;
     justify-content: center;
@@ -57,7 +57,7 @@
     margin-bottom: 4vh;
 }
 
-/* ✅ Blocs indiv */
+/* Blocs indiv */
 .gestion-partie {
     flex: 1 1 300px;
     max-width: 500px;
@@ -94,7 +94,7 @@
     transform: scale(1.05);
 }
 
-/* ✅ Message */
+/* Message */
 .message {
     color: green;
     text-align: center;
